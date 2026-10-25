@@ -25,7 +25,7 @@ otherwise the dashboard keeps the old model:
 
 ```sh
 .venv/bin/python make_home.py
-git add home.obj home.mtl home.svg card.yaml manifest.json make_home.py README.md AGENTS.md floor3d-model.zip
+git add home.obj home.mtl home.svg home_preview.png card.yaml manifest.json make_home.py README.md AGENTS.md floor3d-model.zip
 git commit -m "Describe the model change"
 git push origin master
 ```

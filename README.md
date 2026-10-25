@@ -75,8 +75,8 @@ cd /home/simo/floor3d-starter
 import cairosvg
 cairosvg.svg2png(url='home.svg', write_to='home_preview.png', output_width=1600)
 PY
-git add home.obj home.mtl home.svg card.yaml manifest.json \
-        make_home.py README.md AGENTS.md floor3d-model.zip
+git add home.obj home.mtl home.svg home_preview.png card.yaml manifest.json \
+        make_home.py README.md AGENTS.md GLOSSARY.md floor3d-model.zip
 git commit -m "Describe the model change"
 git push origin master
 ```
