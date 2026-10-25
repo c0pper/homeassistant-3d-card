@@ -53,7 +53,7 @@ ROOMS = [
     ("room_living", "Living room (assumed)", [(600, 204), (870, 174), (870, 515), (688, 515), (688, 468), (600, 468)], "wood"),
     ("room_corridor", "Corridor", [(324, 468), (688, 468), (688, 588), (324, 588)], "stone"),
     ("room_right", "Studio", [(870, 174), (1098, 149), (1098, 515), (870, 515)], "wood"),
-    ("room_ca", "C.A.", [(115, 468), (267, 468), (267, 568), (115, 568)], "tile"),
+    ("room_ca", "C.A. (wardrobe)", [(115, 468), (267, 468), (267, 597), (115, 597)], "tile"),
     ("room_wc1", "WC 1", [(115, 597), (267, 597), (267, 819), (115, 819)], "tile"),
     ("room_wc2", "WC 2", [(267, 597), (375, 597), (375, 819), (267, 819)], "tile"),
     ("room_rip", "RIP (storage)", [(470, 405), (585, 405), (585, 524), (470, 524)], "stone"),
@@ -95,13 +95,16 @@ WALLS = [
     ("corridor_east", P(697, 515), P(697, 588), EXT_T, []),
     ("left", P(105, 824), P(105, 246), 0.286, []),
     # interior
-    ("left_south", P(95, 468), P(324, 468), INT_T, [(M(175), M(225), "door")]),
+    # wardrobe room: door moved to the north wall (from the bedroom)
+    ("left_south", P(95, 468), P(324, 468), INT_T, [
+        (0.55, 1.45, "door"),
+        (M(175), M(225), "door"),
+    ]),
     ("left_east", P(324, 240), P(324, 524), INT_T, []),
-    ("ca_east", P(267, 468), P(267, 597), INT_T, [(M(12), M(57), "door")]),
-    ("ca_south", P(115, 568), P(267, 568), INT_T, []),
+    ("ca_east", P(267, 468), P(267, 597), INT_T, []),
     ("wc_north", P(115, 597), P(375, 597), INT_T, [(M(35), M(85), "door"), (M(165), M(215), "door")]),
     ("wc_div", P(267, 597), P(267, 819), INT_T, []),
-    ("wc_east", P(375, 597), P(375, 838), INT_T, []),
+    ("wc_east", P(375, 597), P(375, 824), INT_T, []),
     # south wall of the two bathrooms, now the apartment boundary: the two
     # windows that used to sit on the removed stairwell wall live here
     ("wc_south", P(115, 819), P(375, 819), EXT_T, [

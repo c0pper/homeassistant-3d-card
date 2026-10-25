@@ -12,15 +12,18 @@
 
 ## Rooms & Areas
 
-| Term | Definition | Example |
-|------|------------|---------|
-| **Main** | The only floor in this project – the 5th floor apartment. All rooms are on this floor. |
-| **Bedroom** | Primary sleeping space. |
-| **Studio** | Open-plan living/working space. |
-| **Master Bathroom** | Master bathroom (master suite). |
-| **Guest Bathroom** | Guest bathroom (separate from master). |
-| **Kitchen** | Kitchen area. |
-| **Living Room** | Common open space used for relaxation. |
+| Term | Definition | Object ID |
+|------|------------|-----------|
+| **Main** | The only floor in this project – the 5th floor apartment. All rooms are on this floor. | — |
+| **Bedroom** | Primary sleeping space. | `room_left` |
+| **Kitchen** | Kitchen area. | `room_kitchen` |
+| **Living room** | Common open space used for relaxation. | `room_living` |
+| **Corridor** | Hall inside the main entrance, open to the living room. | `room_corridor` |
+| **Studio** | Open-plan living/working space. | `room_right` |
+| **C.A. (wardrobe room)** | Walk-in wardrobe (*cabina armadio*), 4.0 m², entered from the bedroom. Its old door to the corridor was removed. | `room_ca` |
+| **WC 1 (master bathroom)** | Master bathroom. | `room_wc1` |
+| **WC 2 (second bathroom)** | Second bathroom. | `room_wc2` |
+| **RIP (storage)** | Storage room (*ripostiglio*), between living room and corridor. | `room_rip` |
 
 ## Floors
 
@@ -62,9 +65,7 @@
 
 ## Storage
 
-| Term | Definition | Value |
-|------|------------|-------|
-| **RIP** | Storage room (Italian *ripostiglio*), between the living room and the corridor (object `room_rip`). Modelled and kept. | — |
+RIP is listed under [Rooms & Areas](#rooms--areas).
 
 ## Design Decisions (to be documented in ADRs)
 
@@ -77,29 +78,9 @@
 - **Choice**: floor3d‑card fork (active, updated) vs original (dormant). We chose the fork.
 - **Binding**: Object‑level binding (each entity maps to one 3D object). One binding per entity.
 - **Architectural details**: Wall thickness 0.12m (interior), 0.20m (exterior); wall height 2.70m.
-- **Locations**: Only one floor: **Main** (5th floor apartment). Rooms: Bedroom, Studio, Master Bathroom, Guest Bathroom, Kitchen, Living Room.
+- **Locations**: Only one floor: **Main** (5th floor apartment). Rooms: Bedroom, Kitchen, Living room, Corridor, Studio, C.A. wardrobe, WC 1, WC 2, RIP.
 - **Naming**: HA entity IDs as source of truth; 3D object names mirror them.
 - **Scale**: Metric units; all dimensions in meters.
-- **Material naming**: Use material names that match HA entity names (e.g., `light.living_room_ball_lamp` → `material_living_room_ball`)
-- **Card type**: Custom card that renders the 3D model in the dashboard
-
-## Glossary Map
-
-- `Main` → Main floor (5th floor apartment)
-- `Bedroom` → Bedroom room
-- `Studio` → Studio room
-- `Master Bathroom` → Master bathroom
-- `Guest Bathroom` → Guest bathroom
-- `Kitchen` → Kitchen
-- `Living Room` → Living Room
-- `light.living_room_ball_lamp` → 3D object `living_room_ball_lamp` (OBJ group name)
-- `light.studio_ceiling` → 3D object `studio_ceiling`
-- `light.master_bathroom_vanity` → 3D object `master_bathroom_vanity`
-- `light.kitchen_counter` → 3D object `kitchen_counter`
-- `light.living_room_ceiling` → 3D object `living_room_ceiling`
-- `stairwell` → Common stairwell outside the apartment; not modelled.
-- `main entrance` → Door in `corridor_south`, opening to the stairwell landing.
-- `rip` → Storage room (`room_rip`) between living room and corridor.
 
 ## Furniture & Placement
 

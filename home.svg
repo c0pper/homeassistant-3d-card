@@ -9,7 +9,7 @@
 <path d="M590 159 L860 129 L860 470 L678 470 L678 423 L590 423 Z" fill="#6b4f37" stroke="#a98462" stroke-width="1.2"/>
 <path d="M314 423 L678 423 L678 543 L314 543 Z" fill="#4b4b47" stroke="#7f7f75" stroke-width="1.2"/>
 <path d="M860 129 L1088 104 L1088 470 L860 470 Z" fill="#6b4f37" stroke="#a98462" stroke-width="1.2"/>
-<path d="M105 423 L257 423 L257 523 L105 523 Z" fill="#3d4b56" stroke="#7f9aad" stroke-width="1.2"/>
+<path d="M105 423 L257 423 L257 552 L105 552 Z" fill="#3d4b56" stroke="#7f9aad" stroke-width="1.2"/>
 <path d="M105 552 L257 552 L257 774 L105 774 Z" fill="#3d4b56" stroke="#7f9aad" stroke-width="1.2"/>
 <path d="M257 552 L365 552 L365 774 L257 774 Z" fill="#3d4b56" stroke="#7f9aad" stroke-width="1.2"/>
 <path d="M460 360 L575 360 L575 479 L460 479 Z" fill="#4b4b47" stroke="#7f7f75" stroke-width="1.2"/>
@@ -42,16 +42,15 @@
 <line x1="687.0" y1="470.0" x2="687.0" y2="543.0" stroke="#e5edf7" stroke-width="19.6" stroke-linecap="butt"/>
 <line x1="95.0" y1="779.0" x2="95.0" y2="201.0" stroke="#e5edf7" stroke-width="20.0" stroke-linecap="butt"/>
 <line x1="85.0" y1="423.0" x2="314.0" y2="423.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
+<line x1="123.5" y1="423.0" x2="186.5" y2="423.0" stroke="#f2b84b" stroke-width="5"/>
 <line x1="260.0" y1="423.0" x2="310.0" y2="423.0" stroke="#f2b84b" stroke-width="5"/>
 <line x1="314.0" y1="195.0" x2="314.0" y2="479.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
 <line x1="257.0" y1="423.0" x2="257.0" y2="552.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
-<line x1="257.0" y1="435.0" x2="257.0" y2="480.0" stroke="#f2b84b" stroke-width="5"/>
-<line x1="105.0" y1="523.0" x2="257.0" y2="523.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
 <line x1="105.0" y1="552.0" x2="365.0" y2="552.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
 <line x1="140.0" y1="552.0" x2="190.0" y2="552.0" stroke="#f2b84b" stroke-width="5"/>
 <line x1="270.0" y1="552.0" x2="320.0" y2="552.0" stroke="#f2b84b" stroke-width="5"/>
 <line x1="257.0" y1="552.0" x2="257.0" y2="774.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
-<line x1="365.0" y1="552.0" x2="365.0" y2="793.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
+<line x1="365.0" y1="552.0" x2="365.0" y2="779.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
 <line x1="105.0" y1="774.0" x2="365.0" y2="774.0" stroke="#e5edf7" stroke-width="19.6" stroke-linecap="butt"/>
 <line x1="146.0" y1="774.0" x2="216.0" y2="774.0" stroke="#45c4e8" stroke-width="5"/>
 <line x1="276.0" y1="774.0" x2="346.0" y2="774.0" stroke="#45c4e8" stroke-width="5"/>
@@ -85,8 +84,8 @@
 <text x="998" y="186" fill="#94a3b8" font-size="7.5">16.4 m²</text>
 <circle cx="175" cy="460" r="9" fill="#0b1220" stroke="#f8fafc" stroke-width="1.5"/>
 <text x="175" y="463" fill="#f8fafc" font-size="8" font-weight="700" text-anchor="middle">6</text>
-<text x="188" y="461" fill="#f8fafc" font-size="9" font-weight="700">C.A.</text>
-<text x="188" y="471" fill="#94a3b8" font-size="7.5">3.1 m²</text>
+<text x="188" y="461" fill="#f8fafc" font-size="9" font-weight="700">C.A. (wardrobe)</text>
+<text x="188" y="471" fill="#94a3b8" font-size="7.5">4.0 m²</text>
 <circle cx="175" cy="645" r="9" fill="#0b1220" stroke="#f8fafc" stroke-width="1.5"/>
 <text x="175" y="648" fill="#f8fafc" font-size="8" font-weight="700" text-anchor="middle">7</text>
 <text x="188" y="646" fill="#f8fafc" font-size="9" font-weight="700">WC 1</text>
@@ -127,8 +126,8 @@
 <text x="1216" y="168" fill="#e2e8f0" font-size="10">5&#160;&#160;Studio</text>
 <text x="1462" y="168" fill="#94a3b8" font-size="9" text-anchor="end">16.4 m²</text>
 <rect x="1198" y="177" width="10" height="10" rx="2" fill="#3d4b56" stroke="#7f9aad" stroke-width="0.8"/>
-<text x="1216" y="186" fill="#e2e8f0" font-size="10">6&#160;&#160;C.A.</text>
-<text x="1462" y="186" fill="#94a3b8" font-size="9" text-anchor="end">3.1 m²</text>
+<text x="1216" y="186" fill="#e2e8f0" font-size="10">6&#160;&#160;C.A. (wardrobe)</text>
+<text x="1462" y="186" fill="#94a3b8" font-size="9" text-anchor="end">4.0 m²</text>
 <rect x="1198" y="195" width="10" height="10" rx="2" fill="#3d4b56" stroke="#7f9aad" stroke-width="0.8"/>
 <text x="1216" y="204" fill="#e2e8f0" font-size="10">7&#160;&#160;WC 1</text>
 <text x="1462" y="204" fill="#94a3b8" font-size="9" text-anchor="end">6.9 m²</text>

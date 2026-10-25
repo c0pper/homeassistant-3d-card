@@ -54,8 +54,8 @@
     {
       "number": 6,
       "object_id": "room_ca",
-      "label": "C.A.",
-      "area_m2": 3.1,
+      "label": "C.A. (wardrobe)",
+      "area_m2": 4.0,
       "material": "tile",
       "ha_area": null,
       "assuming_name": false,
@@ -134,7 +134,7 @@
       "room": "Studio"
     }
   ],
-  "walls": 18,
+  "walls": 17,
   "note": "Pixel coordinates from floorplan.jpg. Absolute scale is a placeholder; OBJ vertices are centimetres. HA area mapping and room names marked 'assuming' are provisional.",
   "obj_units": "cm"
 }
