@@ -41,7 +41,7 @@ use jsDelivr with the commit that contains this folder:
 
 ```yaml
 # dashboard resource, type module
-https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@<commit>/custom-card/floor3d-card.js
+https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@0b3b367/custom-card/floor3d-card.js
 ```
 
 The entry imports `./floor3d-card-core-<hash>.js` and the editor chunk

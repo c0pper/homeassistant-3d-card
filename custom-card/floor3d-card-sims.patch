@@ -46,7 +46,7 @@ index 39bf4f5..8571d0b 100644
 +  console.warn('floor3d-card sims: custom:floor3d-card-sims is already defined');
  }
 diff --git a/src/walls.ts b/src/walls.ts
-index 7f4e9ce..78e206c 100644
+index 7f4e9ce..793ed09 100644
 --- a/src/walls.ts
 +++ b/src/walls.ts
 @@ -7,18 +7,26 @@ import * as THREE from 'three';
@@ -173,7 +173,7 @@ index 7f4e9ce..78e206c 100644
      if (this._mode != 'fade' || !this._walls.length) return;
      const side = this.host.camera.position.clone().sub(this.host.target).setY(0);
      const level = side.lengthSq() > 1e-6;
-@@ -201,6 +254,24 @@ export class Walls {
+@@ -201,6 +254,26 @@ export class Walls {
      if (changed) this.host.animate();
    }
  
@@ -189,6 +189,8 @@ index 7f4e9ce..78e206c 100644
 +      const visible = !near;
 +      if (w.high.visible !== visible) {
 +        w.high.visible = visible;
++        // A hidden high part must not swallow taps meant for a lamp or room behind it.
++        w.high.userData.f3dFaded = !visible;
 +        changed = true;
 +      }
 +    });
