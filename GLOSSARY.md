@@ -53,6 +53,12 @@
 | **Wall Height** | 2.70 m (standard ceiling height). |
 | **Floor** | Only floor present: **Main** (5th floor). |
 
+## Exterior Areas
+
+| Term | Definition | Value |
+|------|------------|-------|
+| **Stairwell** | Outdoor area adjacent to the stairs, accessible from the Main floor. | — |
+
 ## Design Decisions (to be documented in ADRs)
 
 - **Model format**: OBJ + MTL + GLB (for 3D export)
