@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
 """
+LEGACY — DO NOT RUN.
+
+This is the original 5-room placeholder starter. Running it overwrites
+home.obj / home.mtl / home.svg / card.yaml / manifest.json with a simplified
+model, which breaks the real model in Home Assistant.
+
+The real generator is make_home.py, which builds the model from floorplan.jpg.
+
+Original description:
+
 Generate a starter 3D floor plan for the Home Assistant floor3d-card.
 
 Outputs (next to this script):
@@ -383,7 +393,7 @@ def main():
             {"entity": "binary_sensor.entrance_door_contact", "object_id": "door_entrance"},
             {"entity": "binary_sensor.balcone_lato_cucina_contact", "object_id": "door_balcony"},
         ],
-        "notes": "Starter dimensions are estimates. Edit ROOMS/WALLS in make_model.py and re-run.",
+        "notes": "Starter dimensions are estimates. Edit ROOMS/WALLS in make_model_starter_OLD.py and re-run.",
     }
     (OUT / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     print("wrote", ", ".join(sorted(p.name for p in OUT.glob("home.*"))))

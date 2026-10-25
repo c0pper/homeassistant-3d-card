@@ -30,10 +30,10 @@ Home Assistant dashboard **Home 3D** (`home-3d`).
 | `home.svg`, `home_preview.png` | Numbered top-view preview and room/light legend. |
 | `card.yaml` | Card config for the permanent `/local/floor3d/` location. |
 | `manifest.json` | Object IDs, room numbers, areas, HA areas, light mapping. |
-| `make_home.py` | Generator. Edit the tables at the top and re-run. |
+| `make_home.py` | **The real generator** — builds the model from `floorplan.jpg`. Edit the tables at the top and re-run. |
 | `serve.py` | Temporary CORS static server on port 8765. |
 | `floorplan.jpg` / `.png` | Source floor plan. |
-| `make_model.py` | Original placeholder starter generator (legacy). |
+| `make_model_starter_OLD.py` | Legacy placeholder starter (5 rooms). **Do not run** — it overwrites `home.obj`/`home.mtl`/`home.svg` with a simplified model and breaks the card. |
 
 ## Room mapping
 
