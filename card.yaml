@@ -7,7 +7,7 @@
 # and set path: /local/floor3d/.
 type: custom:floor3d-card-sims
 name: Home 3D
-path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/fb54b9a/
+path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/5b7ecaa/
 objfile: home.obj
 mtlfile: home.mtl
 header: 'no'

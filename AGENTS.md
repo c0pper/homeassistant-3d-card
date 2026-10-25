@@ -9,7 +9,7 @@ The dashboard loads the model **from the public GitHub repo** through
 
 - Dashboard: `home-3d` (storage mode), card
   **`custom:floor3d-card-sims`** with
-  `path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/fb54b9a/`.
+  `path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/5b7ecaa/`.
 - Card model files: `objfile: home.obj`, `mtlfile: home.mtl`.
   The path is **pinned to the commit that contains the model**. Raw
   GitHub caches a branch for ~5 minutes and a `?v=` query does not
@@ -44,7 +44,7 @@ git rev-parse --short HEAD
 # path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/<sha>/
 ```
 
-The current model commit is `fb54b9a`; the custom card commit is `e822865`. `objfile` and `mtlfile` stay
+The current model commit is `5b7ecaa`; the custom card commit is `e822865`. `objfile` and `mtlfile` stay
 plain names.
 
 If `custom-card/` changes, rebuild it with the instructions in
@@ -118,7 +118,7 @@ custom sims build.
 
 ## Generating the model
 
-`make_home.py` is the generator. It builds `home.obj`, `home.mtl`, `home.svg`, `card.yaml`, and `manifest.json` from `floorplan.jpg`. Edit `ROOMS` / `WALLS`, `BALCONIES` for the two north slabs (`balcony_kitchen` x 350–515, `balcony_living` x 600–760), and `SIMS_H` for the 20 cm wall split, then re-run it.
+`make_home.py` is the generator. It builds `home.obj`, `home.mtl`, `home.svg`, `card.yaml`, and `manifest.json` from `floorplan.jpg`. Edit `ROOMS` / `WALLS`, `BALCONIES` for the two north slabs (`balcony_kitchen` x 350–515, `balcony_living` x 600–760), and `SIMS_H` for the 20 cm wall split, then re-run it. The four top-wall pairs are `pair_window` / `pair_balcony` openings: one combined opening, two equal glass leaves and a `PAIR_MULLION` (6 cm) frame; do not split them back into two wall-pier openings.
 
 `make_model_starter_OLD.py` is the legacy 5-room placeholder. Running it overwrites the real model with a simplified one and empties the dashboard card.
 

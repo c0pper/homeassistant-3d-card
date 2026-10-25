@@ -44,7 +44,7 @@ looks hollow at 20 cm.
 - The card JS is served by jsDelivr with a commit-pinned path; raw GitHub
   serves `.js` as `text/plain`, which browsers reject for module
   resources. The model OBJ/MTL remains on raw GitHub.
-- The model path is pinned to model commit `fb54b9a`; the custom card
+- The model path is pinned to model commit `5b7ecaa`; the custom card
   resource is pinned to custom-card commit `e822865`.
 
 ## Consequences

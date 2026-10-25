@@ -37,8 +37,8 @@ Home Assistant dashboard **Home 3D** (`home-3d`).
 
 | Thing | Value |
 |---|---|
-| Model commit | `fb54b9a` |
-| Model base URL | `https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/fb54b9a/` |
+| Model commit | `5b7ecaa` |
+| Model base URL | `https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/5b7ecaa/` |
 | Custom card resource | `https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@e822865/custom-card/floor3d-card.js` |
 | Dashboard card type | `custom:floor3d-card-sims` |
 | Wall mode | `sims` |
@@ -147,7 +147,7 @@ git rev-parse --short HEAD
 and set the dashboard card's `path` to
 `https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/<sha>/`
 (the same value in `card.yaml`). The current model commit is
-**`fb54b9a`**. `objfile` and `mtlfile` stay plain names.
+**`5b7ecaa`**. `objfile` and `mtlfile` stay plain names.
 
 If the custom card itself changes, rebuild it (see
 `custom-card/README.md`), commit the new `custom-card/` files, and update
@@ -179,13 +179,18 @@ Two balconies are modelled on the north wall:
 
 | Balcony | Plan span | Doors | Objects |
 |---|---|---|---|
-| Kitchen | x 350–515 px | 2 full-height glass doors | `balcony_kitchen_*`, `wall_sims_glass_*` |
-| Living room | x 600–760 px | 2 full-height glass doors | `balcony_living_*`, `wall_sims_glass_*` |
+| Kitchen | x 350–515 px | one opening, 2 equal full-height leaves | `balcony_kitchen_*`, `wall_sims_glass_*` |
+| Living room | x 600–760 px | one opening, 2 equal full-height leaves | `balcony_living_*`, `wall_sims_glass_*` |
 
 Each balcony is a stone slab with a glass parapet and dark handrail. The
-glass door panes run from **5 cm to 285 cm**; in `sims` mode the near
-pane shows its 5–20 cm part and the high part hides; far panes stay full.
-No door leaves, frames or handles are modelled yet, and the two door
+pair is one combined opening with a **6 cm mullion** between two equal
+glass leaves; there is no wall pier between them. The leaves run from
+**5 cm to 285 cm**; in `sims` mode the near leaves show their 5–20 cm
+part and the high parts hide; far leaves stay full.
+
+The bedroom and studio windows use the same two-equal-leaf arrangement,
+with their 90 cm sill and 2.2 m head; they remain windows rather than
+full-height doors. No door handles are modelled yet, and the two door
 contacts are **not bound**:
 
 - `binary_sensor.entrance_door_contact`

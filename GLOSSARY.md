@@ -106,8 +106,8 @@ RIP is listed under [Rooms & Areas](#rooms--areas).
 
 | Term | Definition | Example |
 |------|------------|---------|
-| **Window** | Glass pane split like the walls at 20 cm: `wall_sims_glass_low_*` (if the sill is below 20 cm) and `wall_sims_glass_high_*`; the high part hides with its wall in `sims` mode. The opening itself is a `window` opening in a `wall_*` object. | `wall_sims_glass_high_034` |
-| **Balcony** | Separate 3D object, named like `balcony.kitchen`, `balcony.studio`. Two are modelled on the north wall: `balcony_kitchen` (over both kitchen doors, x 350–515) and `balcony_living` (over both living-room doors, x 600–760), each a slab with a glass parapet and a dark handrail. Each balcony has two full-height glass door panes split at 20 cm into `wall_sims_glass_low_*` (5–20 cm) and `wall_sims_glass_high_*` (20–285 cm); the high part hides with the wall. | `balcony_kitchen_slab` |
+| **Window** | Two equal glass leaves in one combined opening with a 6 cm mullion; each leaf is split like the walls at 20 cm: `wall_sims_glass_low_*` (if the sill is below 20 cm) and `wall_sims_glass_high_*`; the high part hides with its wall in `sims` mode. The opening itself is a `window` opening in a `wall_*` object. | `wall_sims_glass_high_034` |
+| **Balcony** | Separate 3D object, named like `balcony.kitchen`, `balcony.studio`. Two are modelled on the north wall: `balcony_kitchen` (x 350–515) and `balcony_living` (x 600–760), each a slab with a glass parapet and a dark handrail. Each balcony has one combined opening with a 6 cm mullion and two equal full-height glass leaves, split at 20 cm into `wall_sims_glass_low_*` (5–20 cm) and `wall_sims_glass_high_*` (20–285 cm); the high part hides with the wall. | `balcony_kitchen_slab` |
 | **Door (opening)** | Opening in a wall object, not a hinged leaf yet. The main entrance is an opening in `corridor_south`; the balcony openings are in the `top` wall. The door contacts are not bound. | `corridor_south` |
 
 ## Performance Concepts
