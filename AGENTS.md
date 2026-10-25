@@ -30,6 +30,12 @@ The permanent setup (`/config/www/floor3d/`, `path: /local/floor3d/`) is a delib
 
 The dashboard card binds entities to `object_id` values (`floor_base`, `room_left`, `room_kitchen`, `room_living`, `room_corridor`, `room_right`, `room_ca`, `room_wc1`, `room_wc2`, `room_stairs`, `room_rip`, plus lights). Renaming an object in `make_home.py` breaks the matching binding and zoom area, so update `card.yaml` and the dashboard in the same change.
 
+## Lighting
+
+The card follows the real sun: `sun: 'yes'` with `sun_power`, a `sky_power` fill, `backgroundColor: sky`, and `shadow: 'yes'`. Daylight, colour and shadows therefore come from `sun.sun` and need no scheduling.
+
+Torch brightness is `globalLightPower: sensor.floor3d_ambient_power`, a Home Assistant template helper that interpolates 0.75 at night to 0.25 by day from the sun's elevation. Rename or delete that helper and the model goes dark. Overall brightness is `exposure`; the GPU limit is 14 shadow-casting lights (5 lamps + the sun here).
+
 ## Home Assistant access
 
 Dashboard config is read and written through the `ha-mcp` tools (`ha_config_get_dashboard`, `ha_config_set_dashboard`) with `url_path: home-3d`. Home Assistant itself runs on `192.168.1.144`; its config folder is not mounted on this machine.

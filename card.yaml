@@ -8,9 +8,21 @@ path: /local/floor3d/
 objfile: home.obj
 mtlfile: home.mtl
 header: 'no'
-backgroundColor: '#0f172a'
-globalLightPower: 0.55
-shadow: 'no'
+backgroundColor: sky
+exposure: 1.15
+tone_mapping: neutral
+light_power: 1
+# torch light: brighter at night (sensor.floor3d_ambient_power, 0.75 night / 0.25 day)
+globalLightPower: sensor.floor3d_ambient_power
+sun: 'yes'
+sun_power: 1
+sky_power: 0.55
+sky_color: '#e6eeff'
+ground_color: '#706458'
+shadow: 'yes'
+north:
+  x: 0
+  z: -1
 click: 'yes'
 walls: fade
 walls_opacity: 0.18
