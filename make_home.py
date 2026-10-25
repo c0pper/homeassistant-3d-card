@@ -49,14 +49,19 @@ BASE = [(95, 246), (1118, 132), (1118, 570), (706, 570), (706, 598), (385, 598),
 ROOMS = [
     # id, label, polygon (px), floor material
     ("room_left", "Bedroom", [(115, 258), (324, 235), (324, 468), (115, 468)], "wood"),
-    ("room_kitchen", "Kitchen", [(324, 235), (600, 204), (600, 468), (324, 468)], "tile"),
+    ("room_kitchen", "Kitchen", [(267, 468), (324, 468), (324, 235), (600, 204), (600, 468),
+                                 (574, 468), (571, 461), (566, 455), (560, 450), (553, 447),
+                                 (545, 446), (474, 446), (474, 497), (267, 497)], "tile"),
     ("room_living", "Living room (assumed)", [(600, 204), (870, 174), (870, 550), (688, 550), (688, 468), (600, 468)], "wood"),
-    ("room_corridor", "Corridor", [(267, 468), (688, 468), (688, 588), (267, 588)], "stone"),
+    ("room_corridor", "Corridor", [(267, 497), (474, 497), (474, 518), (575, 518), (575, 468),
+                                   (688, 468), (688, 588), (267, 588)], "stone"),
     ("room_right", "Studio", [(870, 174), (1098, 149), (1098, 550), (870, 550)], "wood"),
     ("room_ca", "C.A. (wardrobe)", [(115, 468), (267, 468), (267, 597), (115, 597)], "tile"),
     ("room_wc1", "WC 1", [(115, 597), (267, 597), (267, 819), (115, 819)], "tile"),
     ("room_wc2", "WC 2", [(267, 597), (375, 597), (375, 819), (267, 819)], "tile"),
-    ("room_rip", "RIP (storage)", [(470, 405), (585, 405), (585, 524), (470, 524)], "stone"),
+    # storage room: rounded north-east corner, door in the south wall
+    ("room_rip", "RIP (storage)", [(474, 446), (545, 446), (553, 447), (560, 450), (566, 455),
+                                   (571, 461), (574, 468), (575, 476), (575, 518), (474, 518)], "stone"),
 ]
 
 # ---------------------------------------------------------------- walls
@@ -115,9 +120,18 @@ WALLS = [
     ]),
     # main entrance door to the apartment (x 600-680 in the plan)
     ("corridor_south", P(267, 588), P(697, 588), EXT_T, [(M(333), M(413), "door")]),
-    ("rip_west", P(470, 405), P(470, 524), INT_T, []),
-    ("rip_north", P(470, 405), P(585, 405), INT_T, []),
-    ("rip_east", P(585, 405), P(585, 524), INT_T, [(M(25), M(85), "door")]),
+    # partition between kitchen and corridor, left of the storage room
+    ("corridor_north", P(324, 497), P(474, 497), INT_T, []),
+    # storage room: straight walls; the rounded corner is built in build()
+    ("rip_west", P(474, 446), P(474, 518), INT_T, []),
+    ("rip_north", P(474, 446), P(545, 446), INT_T, []),
+    ("rip_east", P(575, 476), P(575, 518), INT_T, []),
+    ("rip_south", P(474, 518), P(575, 518), INT_T, [(0.657, 1.314, "door")]),
+    # living-room partition: stepped wall with the kitchen counter against it
+    ("living_part_west", P(701, 403), P(701, 430), INT_T, []),
+    ("living_part_south", P(701, 430), P(816, 430), INT_T, []),
+    ("living_part_riser", P(816, 403), P(816, 430), INT_T, []),
+    ("living_part_north", P(816, 403), P(868, 403), INT_T, []),
     ("right_west", P(870, 178), P(870, 550), INT_T, [(M(267), M(327), "door")]),
 ]
 
@@ -159,6 +173,15 @@ FURNITURE = [
     ("furniture_desk_leg3", 934, 376, 944, 386, 0.00, 0.72, "dark"),
     ("furniture_desk_leg4", 1026, 376, 1036, 386, 0.00, 0.72, "dark"),
     ("furniture_wardrobe", 930, 400, 1050, 455, 0.00, 2.10, "wood"),
+    ("furniture_living_counter", 703, 437, 823, 492, 0.00, 0.92, "counter"),
+    ("furniture_living_unit", 823, 411, 869, 493, 0.00, 2.10, "white"),
+]
+
+# ---------------------------------------------------------------- balconies
+# name, plan x from, plan x to, depth from the wall face (m)
+BALCONIES = [
+    ("balcony_living", 350, 515, 0.78),
+    ("balcony_kitchen", 600, 760, 0.78),
 ]
 
 MATERIALS = {
@@ -402,6 +425,48 @@ def build():
     # walls
     for name, p1, p2, t, openings in WALLS:
         add_wall(obj, name, p1, p2, t, openings)
+
+    # storage room: rounded north-east corner, an arc band centred on (545,476)
+    cx, cz = X(545), Z(476)
+    r = 30.0 / SCALE
+    steps = 10
+    outer, inner = [], []
+    for i in range(steps + 1):
+        a = math.radians(-90 + 90 * i / steps)
+        outer.append((cx + (r + INT_T / 2) * math.cos(a),
+                      cz + (r + INT_T / 2) * math.sin(a)))
+        inner.append((cx + (r - INT_T / 2) * math.cos(a),
+                      cz + (r - INT_T / 2) * math.sin(a)))
+    obj.poly_prism("wall_rip_curve", "wall", outer + list(reversed(inner)), 0.0, H)
+
+    # balconies: slab, glass parapet on three sides, dark handrail
+    w1, w2 = P(96.1, 255.7), P(1119.1, 141.7)
+    dxw, dzw = w2[0] - w1[0], w2[1] - w1[1]
+    Lw = math.hypot(dxw, dzw)
+    uxw, uzw = dxw / Lw, dzw / Lw
+    nxw, nzw = uzw, -uxw          # outward, away from the rooms
+    face = EXT_T / 2
+
+    def strip(p, q, t):
+        dxs, dzs = q[0] - p[0], q[1] - p[1]
+        Ls = math.hypot(dxs, dzs) or 1.0
+        ox, oz = -dzs / Ls * t / 2, dxs / Ls * t / 2
+        return [(p[0] + ox, p[1] + oz), (q[0] + ox, q[1] + oz),
+                (q[0] - ox, q[1] - oz), (p[0] - ox, p[1] - oz)]
+
+    for name, px0, px1, depth in BALCONIES:
+        s0, s1 = top_d(px0), top_d(px1)
+        a0 = (w1[0] + uxw * s0, w1[1] + uzw * s0)
+        a1 = (w1[0] + uxw * s1, w1[1] + uzw * s1)
+        p0 = (a0[0] + nxw * face, a0[1] + nzw * face)
+        p1 = (a1[0] + nxw * face, a1[1] + nzw * face)
+        q0 = (a0[0] + nxw * (face + depth), a0[1] + nzw * (face + depth))
+        q1 = (a1[0] + nxw * (face + depth), a1[1] + nzw * (face + depth))
+        obj.poly_prism(name + "_slab", "stone", [p0, p1, q1, q0], -0.14, 0.02)
+        for tag, pp, qq in (("front", q0, q1), ("left", p0, q0), ("right", p1, q1)):
+            obj.poly_prism(f"{name}_rail_{tag}", "glass", strip(pp, qq, 0.05), 0.02, 1.04)
+            obj.poly_prism(f"{name}_hand_{tag}", "dark", strip(pp, qq, 0.07), 1.04, 1.09)
+
     # lights
     for name, px, py, y, kind in LIGHTS:
         if kind == "sphere":

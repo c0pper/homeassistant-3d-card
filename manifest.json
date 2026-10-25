@@ -15,7 +15,7 @@
       "number": 2,
       "object_id": "room_kitchen",
       "label": "Kitchen",
-      "area_m2": 14.0,
+      "area_m2": 14.81,
       "material": "tile",
       "ha_area": "kitchen",
       "assuming_name": false,
@@ -35,7 +35,7 @@
       "number": 4,
       "object_id": "room_corridor",
       "label": "Corridor",
-      "area_m2": 10.31,
+      "area_m2": 8.05,
       "material": "stone",
       "ha_area": null,
       "assuming_name": false,
@@ -85,7 +85,7 @@
       "number": 9,
       "object_id": "room_rip",
       "label": "RIP (storage)",
-      "area_m2": 2.79,
+      "area_m2": 1.44,
       "material": "stone",
       "ha_area": null,
       "assuming_name": false,
@@ -134,7 +134,7 @@
       "room": "Studio"
     }
   ],
-  "walls": 17,
+  "walls": 23,
   "note": "Pixel coordinates from floorplan.jpg. Absolute scale is a placeholder; OBJ vertices are centimetres. HA area mapping and room names marked 'assuming' are provisional.",
   "obj_units": "cm"
 }

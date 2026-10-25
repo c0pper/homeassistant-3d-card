@@ -23,7 +23,7 @@
 | **C.A. (wardrobe room)** | Walk-in wardrobe (*cabina armadio*), 4.0 m², entered from the bedroom. Its old door to the corridor was removed. | `room_ca` |
 | **WC 1 (master bathroom)** | Master bathroom. | `room_wc1` |
 | **WC 2 (second bathroom)** | Second bathroom. | `room_wc2` |
-| **RIP (storage)** | Storage room (*ripostiglio*), between living room and corridor. | `room_rip` |
+| **RIP (storage)** | Storage room (*ripostiglio*), north of the corridor, with a rounded north-east corner and its door in the south wall. | `room_rip` |
 
 ## Floors
 
@@ -104,7 +104,7 @@ RIP is listed under [Rooms & Areas](#rooms--areas).
 | Term | Definition | Example |
 |------|------------|---------|
 | **Window** | Separate 3D object, named like `window.living_room`, `window.kitchen`. Can be linked to sensors. |
-| **Balcony** | Separate 3D object, named like `balcony.kitchen`, `balcony.studio`. |
+| **Balcony** | Separate 3D object, named like `balcony.kitchen`, `balcony.studio`. Two are modelled on the north wall: `balcony_living` (over both living-room doors) and `balcony_kitchen` (over both kitchen doors), each a slab with a glass parapet and a dark handrail. |
 | **Door (opening)** | Separate 3D object linked to binary sensors (`binary_sensor.entrance_door_contact`). Can represent open/closed states in 3D. |
 
 ## Performance Concepts
