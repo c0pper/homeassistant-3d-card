@@ -1,5 +1,5 @@
 diff --git a/src/const.ts b/src/const.ts
-index d3e79bc..be98134 100644
+index d3e79bc..a6f411b 100644
 --- a/src/const.ts
 +++ b/src/const.ts
 @@ -1,7 +1,7 @@
@@ -7,12 +7,12 @@ index d3e79bc..be98134 100644
  // Keep it equal to "version" in package.json and to the tag of the GitHub release (HACS shows the
  // tag): 2.0.0 -> v2.0.0. Test builds between releases get a suffix (v2.0.1-dev.1).
 -export const CARD_VERSION = 'v2.13.2';
-+export const CARD_VERSION = 'v2.13.2-sims.2';
++export const CARD_VERSION = 'v2.13.2-sims.3';
  
  // Events between the card editor and the card shown next to it (the preview): see editor.ts.
  export const EDITOR_EVENT = 'floor3d-card-editor';
 diff --git a/src/environment.ts b/src/environment.ts
-index 0ee2453..a24fae4 100644
+index 0ee2453..57e7cd8 100644
 --- a/src/environment.ts
 +++ b/src/environment.ts
 @@ -49,6 +49,7 @@ export class Environment {
@@ -29,8 +29,8 @@ index 0ee2453..a24fae4 100644
  
 +  // The card's day/night button: undefined follows the real sun; day/night force a fixed sun, sky
 +  // and torch, without touching the lamps.
-+  public setManual(mode: 'day' | 'night' | undefined): void {
-+    if (this._manual === mode) return;
++  public setManual(mode: 'day' | 'night' | undefined, force = false): void {
++    if (!force && this._manual === mode) return;
 +    this._manual = mode;
 +    this._sunKey = undefined;
 +    this._skyKey = undefined;
@@ -88,7 +88,7 @@ index 0ee2453..a24fae4 100644
      return sun ? [Number(sun.attributes.azimuth), Number(sun.attributes.elevation)] : [NaN, NaN];
    }
 diff --git a/src/floor3d-card.ts b/src/floor3d-card.ts
-index 39bf4f5..4ca4785 100644
+index 39bf4f5..7deeaa6 100644
 --- a/src/floor3d-card.ts
 +++ b/src/floor3d-card.ts
 @@ -188,6 +188,9 @@ export class Floor3dCard extends LitElement {
@@ -105,7 +105,7 @@ index 39bf4f5..4ca4785 100644
        }
  
        this._env.init();
-+      this._env.setManual(this._lightingMode === 'auto' ? undefined : this._lightingMode);
++      this._env.setManual(this._lightingMode === 'auto' ? undefined : this._lightingMode, true);
  
        this._applyShadowBudget();
  
