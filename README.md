@@ -11,12 +11,15 @@ Home Assistant dashboard **Home 3D** (`home-3d`).
   doors each, balcony slabs/glass parapets/handrails, furniture and five
   lamp objects. The common stairwell is outside the apartment and is not
   modelled.
-- The dashboard now loads the model from the **public GitHub repo** via
-  `raw.githubusercontent.com`, so it works when Home Assistant or the
-  browser is **off the LAN**. The local preview server is only for
-  development.
-- Walls use **`walls: low`**, cut at **100 cm** above the floor, as a
-  doll's house. This replaced the orientation-based `fade` mode.
+- The dashboard loads the model from the **public GitHub repo** via
+  `raw.githubusercontent.com`, so it works off-LAN. The local preview
+  server is only for development.
+- Walls use a custom **`walls: sims`** mode: walls whose outer side faces
+  the camera are shown as a closed **20 cm stub**; far walls stay at full
+  height. This is the Sims-like cut, not the old uniform `low` cut.
+- The mode is provided by a small custom build of floor3d-card v2.13.2,
+  loaded as **`custom:floor3d-card-sims`**. The HACS card remains
+  installed; the custom resource is separate and shares its editor.
 - Absolute scale is still a placeholder: the plan has no printed
   dimensions, so `SCALE = 70 px/m` is kept. Overall footprint is
   **14.6 × 10.6 m**. The OBJ is exported in **centimetres** because
@@ -26,45 +29,79 @@ Home Assistant dashboard **Home 3D** (`home-3d`).
   Kitchen (west) and Living room (east) is still an assumption, marked
   **\*** in the legend.
 
+## Current URLs and commits
+
+| Thing | Value |
+|---|---|
+| Model commit | `0b3b367` |
+| Model base URL | `https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/0b3b367/` |
+| Custom card resource | `https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@0209251/custom-card/floor3d-card.js` |
+| Dashboard card type | `custom:floor3d-card-sims` |
+| Wall mode | `sims` |
+
+The model base URL is commit-pinned. Raw GitHub caches a branch for
+about five minutes and a `?v=` query does **not** reliably bypass that
+cache (tested); a commit-SHA URL is immutable and served immediately.
+The cost is that each model change needs the path updated to the new
+commit.
+
+The custom card is served by **jsDelivr**, not raw GitHub: raw GitHub
+serves `.js` as `text/plain`, which browsers reject for module
+resources. jsDelivr serves it as `application/javascript` with CORS.
+The commit in the jsDelivr URL contains `custom-card/`; the entry imports
+its `floor3d-card-core-*.js` and editor chunk from the same folder.
+
+The model is loaded in the **browser**, not by Home Assistant, so the
+device showing the dashboard must be able to reach GitHub and jsDelivr.
+No HA token is needed. The repo is public, so the model and floor plan
+are public too; do not put secrets in the model or repo.
+
 ## Files
 
 | File | Purpose |
 |---|---|
 | `home.obj`, `home.mtl` | Model + materials. These are the files the card fetches. |
 | `home.svg`, `home_preview.png` | Numbered top-view preview and room/light legend. |
-| `card.yaml` | Current card config: GitHub raw path, `walls: low`, camera and zoom areas. |
-| `manifest.json` | Object IDs, room numbers, areas, HA areas, light mapping. |
-| `make_home.py` | **The real generator** — builds the model from `floorplan.jpg`. Edit the tables at the top and re-run. |
+| `card.yaml` | Current card config: `custom:floor3d-card-sims`, GitHub raw path, `walls: sims`, camera and zoom areas. |
+| `manifest.json` | Object IDs, room numbers, areas, HA areas, light mapping, wall split metadata. |
+| `make_home.py` | **The real generator** — builds the model from `floorplan.jpg`; splits walls at 20 cm. Edit the tables at the top and re-run. |
+| `custom-card/` | Patched floor3d-card v2.13.2 build, the `sims` wall mode, MIT licence, source patch and build notes. |
 | `serve.py` | Local CORS server on port 8765, for LAN development only. |
 | `floorplan.jpg` / `.png` | Source floor plan. |
 | `make_model_starter_OLD.py` | Legacy placeholder starter (5 rooms). **Do not run** — it overwrites the real model with a simplified one. |
 | `floor3d-model.zip` | Handy package of the model, preview, card and notes. |
 
-## How the card fetches the model now
+## How `walls: sims` works
 
-The repo is public: `c0pper/homeassistant-3d-card`. GitHub raw serves
-the files with `Access-Control-Allow-Origin: *`, which the card needs.
+Every wall solid is split in the model at **20 cm**:
 
-```yaml
-path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/15dd34b/
-objfile: home.obj
-mtlfile: home.mtl
-```
+- `wall_sims_low_*` — a closed 0–20 cm prism, so the stub has a solid top;
+- `wall_sims_high_*` — the rest of the wall.
 
-- The card appends `objfile` / `mtlfile` to `path`, so the actual URLs are
-  `.../15dd34b/home.obj` and `.../15dd34b/home.mtl`.
-- **Pin the path to the commit that contains the model**, not to
-  `master`. Raw GitHub caches a branch for about five minutes and, as
-  tested here, a `?v=` query does not reliably bypass that cache. A
-  commit-SHA URL is immutable and served immediately; the cost is that
-  each model change needs the path updated to the new commit.
-- The model is loaded in the **browser**, not by Home Assistant, so the
-  device showing the dashboard must be able to reach GitHub. Public
-  GitHub is normally reachable; no token is needed.
-- Because the repo is public, the floor-plan model is public too. Do not
-  put secrets or personal data in the model or repo.
+Window and balcony glass is split the same way
+(`wall_sims_glass_low_*` / `wall_sims_glass_high_*`).
 
-### Publishing a model change
+The custom card computes each wall's outward normal (the same rule the
+HACS card uses for `fade`). When the wall's outward side faces the
+camera (`normal · camera_side > 0.3`), the high part is hidden; the low
+part remains. Far walls keep both parts and look full. The rule handles
+corners — both adjacent facades drop — and applies to **exterior and
+interior** walls. Near glass drops with its wall.
+
+- **Snap**, not animated: the upper part disappears/reappears as the
+  camera crosses the threshold.
+- **Straight above**: the horizontal camera-side vector is zero, so no
+  wall is near and every wall stays full. This avoids an all-low flash
+  when passing overhead.
+- The low stub is **20 cm** including a closed top; it is baked into the
+  model (`SIMS_H = 0.20` in `make_home.py`), not configured in the card.
+- Tall non-wall objects (wardrobe, lamps, balcony rails) stay full.
+
+The custom build registers **`floor3d-card-sims`**, not `floor3d-card`.
+The HACS card remains available for `walls: none/fade/low`, and its
+`floor3d-card-editor` is reused.
+
+## Publishing a model change
 
 After editing `make_home.py` and regenerating:
 
@@ -90,8 +127,11 @@ git rev-parse --short HEAD
 and set the dashboard card's `path` to
 `https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/<sha>/`
 (the same value in `card.yaml`). The current model commit is
-**`15dd34b`**. Pinning the commit avoids the raw `master` cache;
-`objfile` and `mtlfile` stay plain names.
+**`0b3b367`**. `objfile` and `mtlfile` stay plain names.
+
+If the custom card itself changes, rebuild it (see
+`custom-card/README.md`), commit the new `custom-card/` files, and update
+the dashboard resource URL to the new jsDelivr commit.
 
 ## Room mapping
 
@@ -119,13 +159,14 @@ Two balconies are modelled on the north wall:
 
 | Balcony | Plan span | Doors | Objects |
 |---|---|---|---|
-| Kitchen | x 350–515 px | 2 full-height glass doors | `balcony_kitchen_*`, `wall_glass_balcony_*` |
-| Living room | x 600–760 px | 2 full-height glass doors | `balcony_living_*`, `wall_glass_balcony_*` |
+| Kitchen | x 350–515 px | 2 full-height glass doors | `balcony_kitchen_*`, `wall_sims_glass_*` |
+| Living room | x 600–760 px | 2 full-height glass doors | `balcony_living_*`, `wall_sims_glass_*` |
 
 Each balcony is a stone slab with a glass parapet and dark handrail. The
-glass door panes run from **5 cm to 285 cm**; with `walls: low` the card
-clips them together with the walls at 100 cm. No door leaves, frames or
-handles are modelled yet, and the two door contacts are **not bound**:
+glass door panes run from **5 cm to 285 cm**; in `sims` mode the near
+pane shows its 5–20 cm part and the high part hides; far panes stay full.
+No door leaves, frames or handles are modelled yet, and the two door
+contacts are **not bound**:
 
 - `binary_sensor.entrance_door_contact`
 - `binary_sensor.balcone_lato_cucina_contact`
@@ -145,10 +186,7 @@ card will show the lamp off until the entity is available.
 
 ## Card behaviour
 
-- `walls: low` with `walls_height: 100` (cm). All objects matching
-  `wall_*` are clipped at 1 m above the floor; windows and balcony glass
-  are named `wall_glass_*` so they are clipped too. Objects that are not
-  walls (wardrobe, lamps, balcony rails) stay at full height.
+- `walls: sims` — see [How `walls: sims` works](#how-walls-sims-works).
 - `camera_position (0, 1500, 850)` and `camera_target (0, 150, 0)` in
   centimetres, relative to the card's centred model.
 - `zoom_areas` menu: Whole home, Bedroom, Studio, Kitchen, Living room,
@@ -173,8 +211,8 @@ ss -ltnp | grep 8765
 curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:8765/home.obj
 ```
 
-This server is not reachable from outside the LAN. If the model
-disappears while you are remote, check the GitHub raw URL instead.
+The custom card JS still comes from jsDelivr; only the model path changes
+for local iteration. This server is not reachable from outside the LAN.
 
 ## Optional permanent HA-local copy
 
@@ -185,8 +223,9 @@ If you later want the model served by Home Assistant itself:
 3. Set `path: /local/floor3d/`.
 4. Hard-refresh (Ctrl+Shift+R). The card caches OBJ/MTL.
 
-This is no longer required for remote use; the GitHub raw path works
-off-LAN.
+You can also copy `custom-card/` to `/config/www/floor3d-card-sims/` and
+register `/local/floor3d-card-sims/floor3d-card.js` as the module
+resource instead of jsDelivr. Neither is required for remote use.
 
 ## Regenerate
 
@@ -202,23 +241,29 @@ Edit the tables at the top of `make_home.py`:
 - `FURNITURE` — object boxes.
 - `BALCONIES` — slab span and depth; the two names are
   `balcony_kitchen` (x 350–515) and `balcony_living` (x 600–760).
+- `SIMS_H` — the low-stub height (0.20 m). The wall split is baked into
+  the OBJ, so changing it needs a regeneration and a new model commit.
 
 Then regenerate and publish (see above). The generator writes
 `home.obj`, `home.mtl`, `home.svg`, `card.yaml` and `manifest.json`.
 
 ## Known limitations
 
-- Scale is assumed, not measured; you chose to keep 70 px/m for now.
-  One real dimension is enough to rescale every object later.
+- Scale is assumed, not measured; 70 px/m is kept for now. One real
+  dimension is enough to rescale every object later.
 - The central Kitchen (west) / Living room (east) split is still
   assumed; the left/right rooms and WC 1 are confirmed.
 - Window positions/counts and door openings are approximate traces of
   the photo, not measured joinery.
 - Balcony doors are glass panes, not hinged leaves; no frames or
-  handles. With `low` walls they are clipped at 1 m.
+  handles. Near glass is cut at 20 cm with its wall.
 - The main stairwell is outside the apartment and not modelled.
-- With `low`, tall non-wall objects (wardrobe 2.1 m, lamps at 2.55 m)
-  remain above the cut. That is expected; the card only clips walls.
+- The custom `sims` card is a fork of floor3d-card v2.13.2; HACS updates
+  to the base card do not automatically update it. The source patch is in
+  `custom-card/`.
+- The wall split doubles the wall objects (low + high) and therefore the
+  OBJ size; the effect is still cheap at runtime because it only toggles
+  `visible`.
 
 ## Next inputs needed
 

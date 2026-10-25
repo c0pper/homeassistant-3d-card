@@ -693,7 +693,7 @@ def card_yaml():
 # and set path: /local/floor3d/.
 type: custom:floor3d-card-sims
 name: Home 3D
-path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/15dd34b/
+path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/0b3b367/
 objfile: home.obj
 mtlfile: home.mtl
 header: 'no'

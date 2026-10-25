@@ -38,6 +38,7 @@
 | **Object Name** | The 3D model file/name that corresponds to a HA entity. |
 | **Entity ID** | The HA entity ID (e.g., `light.living_room_ball_lamp`). |
 | **Naming Convention** | Use `room_<type>_<feature>` for 3D objects (e.g., `living_room_light`, `kitchen_counter`, `bedroom_ceiling`). **Resolution**: 3D object names mirror HA entity IDs directly (e.g., `light.living_room_ball_lamp` → `living_room_ball_lamp`); no synonyms. One-to-one mapping. | `light.living_room_ball_lamp` → `living_room_ball_lamp` |
+| **Custom card** | `custom:floor3d-card-sims`: a patched floor3d-card v2.13.2 that registers `floor3d-card-sims` and adds `walls: sims`. It is a second dashboard resource; the HACS card remains installed. | `custom:floor3d-card-sims` |
 
 ## HA Entity Naming
 
@@ -98,13 +99,14 @@ RIP is listed under [Rooms & Areas](#rooms--areas).
 | **Wall (adjacency)** | Named by room connection (e.g., wall between living room and kitchen). |
 | **Wall thickness** | Confirmed: interior 0.14 m; exterior 0.28 m. |
 | **Wall height** | Confirmed: 2.70 m. |
+| **Sims wall split** | Every wall solid is split at 20 cm into `wall_sims_low_*` (closed stub) and `wall_sims_high_*` (upper part). The custom `walls: sims` card hides the high part when the wall faces the camera. | `wall_sims_low_012` / `wall_sims_high_012` |
 
 ## Windows, Balconies & Doors
 
 | Term | Definition | Example |
 |------|------------|---------|
-| **Window** | Glass pane object named `wall_glass_*` so that the card's `walls: low` clipping cuts it with the wall. The opening itself is a `window` opening in a `wall_*` object. | `wall_glass_034` |
-| **Balcony** | Separate 3D object, named like `balcony.kitchen`, `balcony.studio`. Two are modelled on the north wall: `balcony_kitchen` (over both kitchen doors, x 350–515) and `balcony_living` (over both living-room doors, x 600–760), each a slab with a glass parapet and a dark handrail. Each balcony has two full-height glass door panes, objects `wall_glass_balcony_*`, clipped with the walls in `low` mode. | `balcony_kitchen_slab` |
+| **Window** | Glass pane split like the walls at 20 cm: `wall_sims_glass_low_*` (if the sill is below 20 cm) and `wall_sims_glass_high_*`; the high part hides with its wall in `sims` mode. The opening itself is a `window` opening in a `wall_*` object. | `wall_sims_glass_high_034` |
+| **Balcony** | Separate 3D object, named like `balcony.kitchen`, `balcony.studio`. Two are modelled on the north wall: `balcony_kitchen` (over both kitchen doors, x 350–515) and `balcony_living` (over both living-room doors, x 600–760), each a slab with a glass parapet and a dark handrail. Each balcony has two full-height glass door panes split at 20 cm into `wall_sims_glass_low_*` (5–20 cm) and `wall_sims_glass_high_*` (20–285 cm); the high part hides with the wall. | `balcony_kitchen_slab` |
 | **Door (opening)** | Opening in a wall object, not a hinged leaf yet. The main entrance is an opening in `corridor_south`; the balcony openings are in the `top` wall. The door contacts are not bound. | `corridor_south` |
 
 ## Performance Concepts

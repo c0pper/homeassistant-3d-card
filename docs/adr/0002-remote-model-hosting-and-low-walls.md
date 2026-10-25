@@ -1,5 +1,9 @@
 # Serve the model from GitHub raw and cut walls low
 
+> **Partially superseded by ADR 0003.** The remote-hosting decision below
+> still stands; the `walls: low` part is replaced by the custom
+> `walls: sims` mode. The model commit is `0b3b367`; the custom card commit is `0209251`.
+
 The model used to be loaded from a temporary CORS server on the
 development machine (`http://192.168.1.4:8765/`). That only works when
 the browser showing the dashboard is on the same LAN. The model is also
