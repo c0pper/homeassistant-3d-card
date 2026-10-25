@@ -1,5 +1,5 @@
 diff --git a/src/const.ts b/src/const.ts
-index d3e79bc..a6f411b 100644
+index d3e79bc..de717e2 100644
 --- a/src/const.ts
 +++ b/src/const.ts
 @@ -1,7 +1,7 @@
@@ -7,7 +7,7 @@ index d3e79bc..a6f411b 100644
  // Keep it equal to "version" in package.json and to the tag of the GitHub release (HACS shows the
  // tag): 2.0.0 -> v2.0.0. Test builds between releases get a suffix (v2.0.1-dev.1).
 -export const CARD_VERSION = 'v2.13.2';
-+export const CARD_VERSION = 'v2.13.2-sims.3';
++export const CARD_VERSION = 'v2.13.2-sims.4';
  
  // Events between the card editor and the card shown next to it (the preview): see editor.ts.
  export const EDITOR_EVENT = 'floor3d-card-editor';
@@ -193,7 +193,7 @@ index 39bf4f5..7deeaa6 100644
 +  console.warn('floor3d-card sims: custom:floor3d-card-sims is already defined');
  }
 diff --git a/src/walls.ts b/src/walls.ts
-index 7f4e9ce..793ed09 100644
+index 7f4e9ce..50b9c69 100644
 --- a/src/walls.ts
 +++ b/src/walls.ts
 @@ -7,18 +7,26 @@ import * as THREE from 'three';
@@ -267,7 +267,7 @@ index 7f4e9ce..793ed09 100644
      this._walls = meshes.map((mesh) => {
        const own = (Array.isArray(mesh.material) ? mesh.material : [mesh.material]).map((m) => m.clone());
        mesh.material = Array.isArray(mesh.material) ? own : own[0];
-@@ -129,6 +143,41 @@ export class Walls {
+@@ -129,6 +143,68 @@ export class Walls {
      else this._face();
    }
  
@@ -279,29 +279,56 @@ index 7f4e9ce..793ed09 100644
 +    meshes.forEach((mesh) => {
 +      if (mesh.name) byName.set(mesh.name, mesh);
 +    });
-+    const found: { high: THREE.Mesh; low?: THREE.Mesh; face: { normal: THREE.Vector3; middle: THREE.Vector2 } }[] =
-+      [];
++    interface SimsPiece {
++      high: THREE.Mesh;
++      low?: THREE.Mesh;
++      middle: THREE.Vector2;
++      span: number;
++      normal?: THREE.Vector3;
++    }
++    const groups = new Map<string, SimsPiece[]>();
 +    byName.forEach((high, name) => {
-+      if (!name.includes('_high_')) return;
++      // wall_sims_high_<wall group>_<piece> (also wall_sims_glass_high_...)
++      const match = name.match(/_high_(.+)_(\d+)$/);
++      if (!match) return;
 +      const low = byName.get(name.replace('_high_', '_low_'));
 +      const face = facing(high) || (low ? facing(low) : undefined);
-+      if (!face) return;
++      const box = new THREE.Box3().setFromObject(high);
++      const middle = new THREE.Vector2((box.min.x + box.max.x) / 2, (box.min.z + box.max.z) / 2);
++      const span = Math.max(box.max.x - box.min.x, box.max.z - box.min.z);
 +      high.visible = true;
 +      if (low) low.visible = true;
-+      found.push({ high, low, face });
++      const piece: SimsPiece = { high, low, middle, span, normal: face ? face.normal : undefined };
++      const list = groups.get(match[1]);
++      if (list) list.push(piece);
++      else groups.set(match[1], [piece]);
 +    });
-+    if (!found.length) {
++    if (!groups.size) {
 +      console.warn('floor3d-card: walls: sims found no wall_sims_high_* objects');
 +      return;
 +    }
-+    const middle = found
-+      .map((f) => f.face.middle)
++    const pieces = [...groups.values()].flat();
++    const middle = pieces
++      .map((p) => p.middle)
 +      .reduce((sum, m) => sum.add(m), new THREE.Vector2())
-+      .divideScalar(found.length);
-+    this._sims = found.map(({ high, low, face }) => {
-+      const away = face.middle.clone().sub(middle);
-+      if (face.normal.x * away.x + face.normal.z * away.y < 0) face.normal.negate();
-+      return { high, low, normal: face.normal, middle: face.middle };
++      .divideScalar(pieces.length);
++    this._sims = [];
++    groups.forEach((group) => {
++      const groupMiddle = group
++        .map((p) => p.middle)
++        .reduce((sum, m) => sum.add(m), new THREE.Vector2())
++        .divideScalar(group.length);
++      // The longest piece gives the wall line its normal; a short piece between two windows has
++      // none of its own. If the whole group is short, fall back to the outward radial direction.
++      const candidate = group.filter((p) => p.normal).sort((a, b) => b.span - a.span)[0];
++      const away = groupMiddle.clone().sub(middle);
++      let normal = candidate ? candidate.normal!.clone() : undefined;
++      if (!normal && away.lengthSq() > 1e-6) normal = new THREE.Vector3(away.x, 0, away.y).normalize();
++      if (!normal) return;
++      if (normal.x * away.x + normal.z * away.y < 0) normal.negate();
++      group.forEach((p) =>
++        this._sims.push({ high: p.high, low: p.low, normal, middle: p.middle }),
++      );
 +    });
 +    this.update();
 +  }
@@ -309,7 +336,7 @@ index 7f4e9ce..793ed09 100644
    // low: each level cut at walls_height (100 cm by default) above its floor, the floor of its walls.
    // The inside of a cut wall shows, so that it looks solid from above; its shadow stays whole.
    private _cut(): void {
-@@ -185,6 +234,10 @@ export class Walls {
+@@ -185,6 +261,10 @@ export class Walls {
    // The camera moved: the walls whose face turns to it fade, the others come back. Seen straight from
    // above no wall is in the way.
    public update(): void {
@@ -320,7 +347,7 @@ index 7f4e9ce..793ed09 100644
      if (this._mode != 'fade' || !this._walls.length) return;
      const side = this.host.camera.position.clone().sub(this.host.target).setY(0);
      const level = side.lengthSq() > 1e-6;
-@@ -201,6 +254,26 @@ export class Walls {
+@@ -201,6 +281,26 @@ export class Walls {
      if (changed) this.host.animate();
    }
  
