@@ -383,12 +383,12 @@ def add_wall(obj, name, p1, p2, t, openings):
         # the low part only; far walls show both. The low part is closed,
         # so the stub has a solid 20 cm top.
         if y1 <= SIMS_H:
-            obj.poly_prism(f"wall_sims_low_{n:03d}", "wall", poly, y0, y1)
+            obj.poly_prism(f"wall_sims_low_{name}_{n:03d}", "wall", poly, y0, y1)
         elif y0 >= SIMS_H:
-            obj.poly_prism(f"wall_sims_high_{n:03d}", "wall", poly, y0, y1)
+            obj.poly_prism(f"wall_sims_high_{name}_{n:03d}", "wall", poly, y0, y1)
         else:
-            obj.poly_prism(f"wall_sims_low_{n:03d}", "wall", poly, y0, SIMS_H)
-            obj.poly_prism(f"wall_sims_high_{n:03d}", "wall", poly,
+            obj.poly_prism(f"wall_sims_low_{name}_{n:03d}", "wall", poly, y0, SIMS_H)
+            obj.poly_prism(f"wall_sims_high_{name}_{n:03d}", "wall", poly,
                            SIMS_H + SIMS_GAP, y1)
 
     cur = 0.0
@@ -411,8 +411,8 @@ def add_wall(obj, name, p1, p2, t, openings):
             gp = [(ax + gx, az + gz), (bx + gx, bz + gz),
                   (bx - gx, bz - gz), (ax - gx, az - gz)]
             if BALCONY_SILL < SIMS_H:
-                obj.poly_prism(f"wall_sims_glass_low_{n:03d}", "glass", gp, BALCONY_SILL, SIMS_H)
-            obj.poly_prism(f"wall_sims_glass_high_{n:03d}", "glass", gp,
+                obj.poly_prism(f"wall_sims_glass_low_{name}_{n:03d}", "glass", gp, BALCONY_SILL, SIMS_H)
+            obj.poly_prism(f"wall_sims_glass_high_{name}_{n:03d}", "glass", gp,
                            max(BALCONY_SILL, SIMS_H + SIMS_GAP), BALCONY_HEAD)
         else:
             solid(a, b, 0.0, WIN_SILL)
@@ -427,8 +427,8 @@ def add_wall(obj, name, p1, p2, t, openings):
             gp = [(ax + gx, az + gz), (bx + gx, bz + gz),
                   (bx - gx, bz - gz), (ax - gx, az - gz)]
             if WIN_SILL < SIMS_H:
-                obj.poly_prism(f"wall_sims_glass_low_{n:03d}", "glass", gp, WIN_SILL, SIMS_H)
-            obj.poly_prism(f"wall_sims_glass_high_{n:03d}", "glass", gp,
+                obj.poly_prism(f"wall_sims_glass_low_{name}_{n:03d}", "glass", gp, WIN_SILL, SIMS_H)
+            obj.poly_prism(f"wall_sims_glass_high_{name}_{n:03d}", "glass", gp,
                            max(WIN_SILL, SIMS_H + SIMS_GAP), WIN_HEAD)
         cur = b
     if cur < length:
@@ -459,8 +459,8 @@ def build():
         inner.append((cx + (r - INT_T / 2) * math.cos(a),
                       cz + (r - INT_T / 2) * math.sin(a)))
     rip_poly = outer + list(reversed(inner))
-    obj.poly_prism("wall_sims_low_rip_curve", "wall", rip_poly, 0.0, SIMS_H)
-    obj.poly_prism("wall_sims_high_rip_curve", "wall", rip_poly, SIMS_H + SIMS_GAP, H)
+    obj.poly_prism("wall_sims_low_rip_curve_001", "wall", rip_poly, 0.0, SIMS_H)
+    obj.poly_prism("wall_sims_high_rip_curve_001", "wall", rip_poly, SIMS_H + SIMS_GAP, H)
 
     # balconies: slab, glass parapet on three sides, dark handrail
     w1, w2 = P(96.1, 255.7), P(1119.1, 141.7)
