@@ -2,7 +2,7 @@
 
 > **Partially superseded by ADR 0003.** The remote-hosting decision below
 > still stands; the `walls: low` part is replaced by the custom
-> `walls: sims` mode. The model commit is `0b3b367`; the custom card commit is `020e4b1`.
+> `walls: sims` mode. The model commit is `fb54b9a`; the custom card commit is `1860ac9`.
 
 The model used to be loaded from a temporary CORS server on the
 development machine (`http://192.168.1.4:8765/`). That only works when

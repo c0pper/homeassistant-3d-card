@@ -11,8 +11,13 @@ The normal card only has `none`, `fade` and `low`. `sims` shows **near
 walls as a closed 20 cm stub and far walls at full height**, based on the
 same facing rule as `fade`:
 
-- Each wall in the model is split at 20 cm into `wall_sims_low_*` (the
-  closed stub) and `wall_sims_high_*` (the rest).
+- Each wall in the model is split at 20 cm into
+  `wall_sims_low_<wall line>_<piece>` (the closed stub) and
+  `wall_sims_high_<wall line>_<piece>` (the rest).
+- Pieces are grouped by wall line. The card uses the **longest piece's
+  normal** for the whole line, so short pieces between windows and
+  balconies and corner pillars drop with their wall. A group with no
+  usable normal falls back to the outward radial direction.
 - A wall is near when its outward side faces the camera
   (`normal · camera_side > 0.3`); its high part is hidden. Far walls show
   both parts. Straight above, no wall is near, so all walls stay full.
@@ -57,7 +62,7 @@ use jsDelivr with the commit that contains this folder:
 
 ```yaml
 # dashboard resource, type module
-https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@020e4b1/custom-card/floor3d-card.js
+https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@1860ac9/custom-card/floor3d-card.js
 ```
 
 The entry imports `./floor3d-card-core-<hash>.js` and the editor chunk
@@ -76,7 +81,7 @@ npm run build
 ```
 
 Then copy `dist/*` here. The card version string is
-`v2.13.2-sims.3`.
+`v2.13.2-sims.4`.
 
 ## Upstream
 

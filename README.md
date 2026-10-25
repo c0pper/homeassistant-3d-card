@@ -37,9 +37,9 @@ Home Assistant dashboard **Home 3D** (`home-3d`).
 
 | Thing | Value |
 |---|---|
-| Model commit | `0b3b367` |
-| Model base URL | `https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/0b3b367/` |
-| Custom card resource | `https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@020e4b1/custom-card/floor3d-card.js` |
+| Model commit | `fb54b9a` |
+| Model base URL | `https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/fb54b9a/` |
+| Custom card resource | `https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@1860ac9/custom-card/floor3d-card.js` |
 | Dashboard card type | `custom:floor3d-card-sims` |
 | Wall mode | `sims` |
 
@@ -92,6 +92,13 @@ part remains. Far walls keep both parts and look full. The rule handles
 corners — both adjacent facades drop — and applies to **exterior and
 interior** walls. Near glass drops with its wall.
 
+Wall pieces are named `wall_sims_high_<wall line>_<piece>` (and
+`wall_sims_glass_high_<wall line>_<piece>`). The card groups every piece
+of a wall line and uses the **longest piece's normal** for all of them,
+so short pieces between windows and balconies and corner pillars drop
+with their wall instead of staying full. If a whole group has no usable
+normal, it falls back to the outward radial direction.
+
 - **Snap**, not animated: the upper part disappears/reappears as the
   camera crosses the threshold.
 - **Straight above**: the horizontal camera-side vector is zero, so no
@@ -131,7 +138,7 @@ git rev-parse --short HEAD
 and set the dashboard card's `path` to
 `https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/<sha>/`
 (the same value in `card.yaml`). The current model commit is
-**`0b3b367`**. `objfile` and `mtlfile` stay plain names.
+**`fb54b9a`**. `objfile` and `mtlfile` stay plain names.
 
 If the custom card itself changes, rebuild it (see
 `custom-card/README.md`), commit the new `custom-card/` files, and update

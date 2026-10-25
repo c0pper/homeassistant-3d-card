@@ -25,6 +25,11 @@ looks hollow at 20 cm.
   the camera, using the same `facing` normal and
   `normal · camera_side > 0.3` rule as `fade`. This applies to exterior
   and interior walls; at a corner both adjacent facades drop.
+- Wall pieces are named `wall_sims_high_<wall line>_<piece>` and grouped
+  by wall line. The longest piece's normal is used for the whole line,
+  so short pieces between windows/balconies and corner pillars drop with
+  their wall. A group with no usable normal falls back to the outward
+  radial direction.
 - The change is a **snap** (no animation).
 - Straight above there is no horizontal camera side, so all walls stay
   full.
@@ -35,8 +40,8 @@ looks hollow at 20 cm.
 - The card JS is served by jsDelivr with a commit-pinned path; raw GitHub
   serves `.js` as `text/plain`, which browsers reject for module
   resources. The model OBJ/MTL remains on raw GitHub.
-- The model path is pinned to model commit `0b3b367`; the custom card
-  resource is pinned to custom-card commit `020e4b1`.
+- The model path is pinned to model commit `fb54b9a`; the custom card
+  resource is pinned to custom-card commit `1860ac9`.
 
 ## Consequences
 

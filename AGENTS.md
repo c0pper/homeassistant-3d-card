@@ -9,14 +9,14 @@ The dashboard loads the model **from the public GitHub repo** through
 
 - Dashboard: `home-3d` (storage mode), card
   **`custom:floor3d-card-sims`** with
-  `path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/0b3b367/`.
+  `path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/fb54b9a/`.
 - Card model files: `objfile: home.obj`, `mtlfile: home.mtl`.
   The path is **pinned to the commit that contains the model**. Raw
   GitHub caches a branch for ~5 minutes and a `?v=` query does not
   reliably bypass it (tested); a commit-SHA URL is immutable and served
   immediately. Update the path to the new SHA after each model push.
 - The custom card JS is a second module resource, served by jsDelivr:
-  `https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@020e4b1/custom-card/floor3d-card.js`.
+  `https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@1860ac9/custom-card/floor3d-card.js`.
   It registers `floor3d-card-sims`; the HACS `floor3d-card` resource
   stays installed and shares its editor. Raw GitHub serves `.js` as
   `text/plain`, which browsers reject for modules, hence jsDelivr.
@@ -44,7 +44,7 @@ git rev-parse --short HEAD
 # path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/<sha>/
 ```
 
-The current model commit is `0b3b367`; the custom card commit is `020e4b1`. `objfile` and `mtlfile` stay
+The current model commit is `fb54b9a`; the custom card commit is `1860ac9`. `objfile` and `mtlfile` stay
 plain names.
 
 If `custom-card/` changes, rebuild it with the instructions in
@@ -75,10 +75,15 @@ end-of-project alternative, not the current workflow.
 ### Walls
 
 The card uses the custom **`walls: sims`** mode: every wall solid is
-split in the model at **20 cm** into a closed `wall_sims_low_*` stub and
-a `wall_sims_high_*` upper part. The custom card hides the high part of
-walls whose outward side faces the camera (the same `normal · camera_side
-> 0.3` rule as `fade`); far walls keep both parts. Near glass is split as
+split in the model at **20 cm** into a closed
+`wall_sims_low_<wall line>_<piece>` stub and a
+`wall_sims_high_<wall line>_<piece>` upper part. The custom card hides
+the high part of walls whose outward side faces the camera (the same
+`normal · camera_side > 0.3` rule as `fade`); far walls keep both parts.
+Pieces are grouped by wall line; the longest piece's normal is used for
+all of them, so short pieces between windows/balconies and corner
+pillars drop with their wall. A group with no usable normal falls back
+to the outward radial direction. Near glass is split as
 `wall_sims_glass_low_*` / `wall_sims_glass_high_*` and hides with its
 wall. The change is a snap. Straight above, no wall is near, so all stay
 full. Non-wall objects (wardrobe, lamps, balcony rails) stay full.

@@ -100,7 +100,7 @@ RIP is listed under [Rooms & Areas](#rooms--areas).
 | **Wall (adjacency)** | Named by room connection (e.g., wall between living room and kitchen). |
 | **Wall thickness** | Confirmed: interior 0.14 m; exterior 0.28 m. |
 | **Wall height** | Confirmed: 2.70 m. |
-| **Sims wall split** | Every wall solid is split at 20 cm into `wall_sims_low_*` (closed stub) and `wall_sims_high_*` (upper part). The custom `walls: sims` card hides the high part when the wall faces the camera. | `wall_sims_low_012` / `wall_sims_high_012` |
+| **Sims wall split** | Every wall solid is split at 20 cm into `wall_sims_low_<wall line>_<piece>` (closed stub) and `wall_sims_high_<wall line>_<piece>` (upper part). The custom `walls: sims` card groups pieces by wall line, uses the longest piece's normal, and hides the high parts when that wall faces the camera; short pieces/pillars drop with their wall. | `wall_sims_low_top_012` / `wall_sims_high_top_012` |
 
 ## Windows, Balconies & Doors
 
