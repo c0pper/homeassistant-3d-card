@@ -148,7 +148,7 @@ card will show the lamp off until the entity is available.
 - `walls: low` with `walls_height: 100` (cm). All objects matching
   `wall_*` are clipped at 1 m above the floor; windows and balcony glass
   are named `wall_glass_*` so they are clipped too. Objects that are not
-  walls (stairs, wardrobe, lamps) stay at full height.
+  walls (wardrobe, lamps, balcony rails) stay at full height.
 - `camera_position (0, 1500, 850)` and `camera_target (0, 150, 0)` in
   centimetres, relative to the card's centred model.
 - `zoom_areas` menu: Whole home, Bedroom, Studio, Kitchen, Living room,

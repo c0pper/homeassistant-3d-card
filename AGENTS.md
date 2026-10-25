@@ -67,8 +67,8 @@ end-of-project alternative, not the current workflow.
 The card uses **`walls: low`** with `walls_height: 100` (cm): every
 object matching `walls_objects` (default `wall_*`) is clipped at 1 m
 above the floor. Window glass and balcony panes are named `wall_glass_*`
-so they are clipped with the walls. Non-wall objects (stairs, wardrobe,
-lamps) stay full height. `fade` is the alternative mode; it fades walls
+so they are clipped with the walls. Non-wall objects (wardrobe, lamps,
+balcony rails) stay full height. `fade` is the alternative mode; it fades walls
 by orientation, not by occlusion.
 
 ## Generating the model
