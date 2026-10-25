@@ -4,13 +4,44 @@ A Three.js 3D model of the apartment, shown in a Home Assistant dashboard.
 
 ## How the model reaches Home Assistant
 
-During development the card loads the model **over HTTP from this machine** — nothing is copied into Home Assistant.
+The dashboard loads the model **from the public GitHub repo** through
+`raw.githubusercontent.com`, so it works off the LAN:
 
-- Dashboard: `home-3d` (storage mode), card `custom:floor3d-card` with `path: http://192.168.1.4:8765/`.
-- Server: `serve.py` in this repo serves the folder on port 8765 with `Access-Control-Allow-Origin: *` and `Cache-Control: no-store`.
-- Regenerate a model file, reload the dashboard, and the new geometry appears. No upload, no cache busting.
+- Dashboard: `home-3d` (storage mode), card `custom:floor3d-card` with
+  `path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/master/`.
+- Card model files:
+  `objfile: home.obj?v=<version>` and `mtlfile: home.mtl?v=<version>`.
+  The `?v=` query busts the ~5 minute raw-GitHub cache. The card handles
+  a query in `objfile` (`fileExt = objfile.split('?')[0]...`).
+- GitHub raw sends `Access-Control-Allow-Origin: *`; the browser (not
+  Home Assistant) fetches the OBJ/MTL, so the device showing the
+  dashboard needs internet access. No HA token is involved.
+- The repo is public, so the model/layout is public. Do not commit
+  secrets or personal data.
 
-Check the server before debugging the card:
+After changing `make_home.py` and regenerating, **commit and push**;
+otherwise the dashboard keeps the old model:
+
+```sh
+.venv/bin/python make_home.py
+git add home.obj home.mtl home.svg card.yaml manifest.json make_home.py README.md AGENTS.md floor3d-model.zip
+git commit -m "Describe the model change"
+git push origin master
+```
+
+Then bump the `?v=` value in `card.yaml` and the dashboard card.
+The current value is `2026-10-25-low`.
+
+### Local development fallback
+
+When the browser and this machine are on the same LAN, you can switch
+the card back to the local server for immediate reloads:
+
+- `path: http://192.168.1.4:8765/`, no `?v=` query.
+- `serve.py` serves the folder on port 8765 with
+  `Access-Control-Allow-Origin: *` and `Cache-Control: no-store`.
+
+Check the server before debugging:
 
 ```sh
 ss -ltnp | grep 8765          # is it listening?
@@ -18,13 +49,22 @@ curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:8765/home.obj
 python3 serve.py              # restart it if the port is dead
 ```
 
-If this machine is off or `serve.py` has died, the dashboard shows an empty scene. That is the usual cause of "the model disappeared".
+The local server is not reachable from outside the LAN. The optional
+permanent setup (`/config/www/floor3d/`, `path: /local/floor3d/`) is an
+end-of-project alternative, not the current workflow.
 
-The permanent setup (`/config/www/floor3d/`, `path: /local/floor3d/`) is a deliberate end-of-project step, not the current workflow.
+### Walls
+
+The card uses **`walls: low`** with `walls_height: 100` (cm): every
+object matching `walls_objects` (default `wall_*`) is clipped at 1 m
+above the floor. Window glass and balcony panes are named `wall_glass_*`
+so they are clipped with the walls. Non-wall objects (stairs, wardrobe,
+lamps) stay full height. `fade` is the alternative mode; it fades walls
+by orientation, not by occlusion.
 
 ## Generating the model
 
-`make_home.py` is the generator. It builds `home.obj`, `home.mtl`, `home.svg`, `card.yaml`, and `manifest.json` from `floorplan.jpg`. Edit the `ROOMS` / `WALLS` tables at the top, then re-run it.
+`make_home.py` is the generator. It builds `home.obj`, `home.mtl`, `home.svg`, `card.yaml`, and `manifest.json` from `floorplan.jpg`. Edit `ROOMS` / `WALLS`, and `BALCONIES` for the two north slabs (`balcony_kitchen` x 350–515, `balcony_living` x 600–760), then re-run it.
 
 `make_model_starter_OLD.py` is the legacy 5-room placeholder. Running it overwrites the real model with a simplified one and empties the dashboard card.
 

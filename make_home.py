@@ -180,8 +180,8 @@ FURNITURE = [
 # ---------------------------------------------------------------- balconies
 # name, plan x from, plan x to, depth from the wall face (m)
 BALCONIES = [
-    ("balcony_living", 350, 515, 0.78),
-    ("balcony_kitchen", 600, 760, 0.78),
+    ("balcony_kitchen", 350, 515, 0.78),
+    ("balcony_living", 600, 760, 0.78),
 ]
 
 MATERIALS = {
@@ -394,7 +394,7 @@ def add_wall(obj, name, p1, p2, t, openings):
             gz = ux * 0.02
             ax, az = p1[0] + ux * a, p1[1] + uz * a
             bx, bz = p1[0] + ux * b, p1[1] + uz * b
-            obj.poly_prism(f"balcony_{_wall_no:03d}", "glass",
+            obj.poly_prism(f"wall_glass_balcony_{_wall_no:03d}", "glass",
                            [(ax + gx, az + gz), (bx + gx, bz + gz),
                             (bx - gx, bz - gz), (ax - gx, az - gz)], BALCONY_SILL, BALCONY_HEAD)
         else:
@@ -406,7 +406,7 @@ def add_wall(obj, name, p1, p2, t, openings):
             gz = ux * 0.02
             ax, az = p1[0] + ux * a, p1[1] + uz * a
             bx, bz = p1[0] + ux * b, p1[1] + uz * b
-            obj.poly_prism(f"window_{_wall_no:03d}", "glass",
+            obj.poly_prism(f"wall_glass_{_wall_no:03d}", "glass",
                            [(ax + gx, az + gz), (bx + gx, bz + gz),
                             (bx - gx, bz - gz), (ax - gx, az - gz)], WIN_SILL, WIN_HEAD)
         cur = b
@@ -662,14 +662,15 @@ def preview():
 
 def card_yaml():
     return """# Card for the floor-plan model.
-# Permanent setup: copy home.obj + home.mtl to /config/www/floor3d/
-# and keep path: /local/floor3d/.
-# Temporary preview: set path: http://192.168.1.4:8765/
+# Remote setup (current): model fetched from the public GitHub repo.
+# Local dev on the LAN: set path: http://192.168.1.4:8765/
+# Permanent HA-local setup: copy home.obj + home.mtl to /config/www/floor3d/
+# and set path: /local/floor3d/ (drop the ?v= query).
 type: custom:floor3d-card
 name: Home 3D
-path: /local/floor3d/
-objfile: home.obj
-mtlfile: home.mtl
+path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/master/
+objfile: home.obj?v=2026-10-25-low
+mtlfile: home.mtl?v=2026-10-25-low
 header: 'no'
 backgroundColor: sky
 exposure: 1.15
@@ -687,8 +688,8 @@ north:
   x: 0
   z: -1
 click: 'yes'
-walls: fade
-walls_opacity: 0.18
+walls: low
+walls_height: 100
 camera_position:
   x: 0
   y: 1500

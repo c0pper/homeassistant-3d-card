@@ -1,12 +1,13 @@
 # Card for the floor-plan model.
-# Permanent setup: copy home.obj + home.mtl to /config/www/floor3d/
-# and keep path: /local/floor3d/.
-# Temporary preview: set path: http://192.168.1.4:8765/
+# Remote setup (current): model fetched from the public GitHub repo.
+# Local dev on the LAN: set path: http://192.168.1.4:8765/
+# Permanent HA-local setup: copy home.obj + home.mtl to /config/www/floor3d/
+# and set path: /local/floor3d/ (drop the ?v= query).
 type: custom:floor3d-card
 name: Home 3D
-path: /local/floor3d/
-objfile: home.obj
-mtlfile: home.mtl
+path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/master/
+objfile: home.obj?v=2026-10-25-low
+mtlfile: home.mtl?v=2026-10-25-low
 header: 'no'
 backgroundColor: sky
 exposure: 1.15
@@ -24,8 +25,8 @@ north:
   x: 0
   z: -1
 click: 'yes'
-walls: fade
-walls_opacity: 0.18
+walls: low
+walls_height: 100
 camera_position:
   x: 0
   y: 1500
