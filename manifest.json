@@ -1,150 +1,79 @@
 {
-  "scale_px_per_m": 70.0,
   "rooms": [
     {
-      "number": 1,
-      "object_id": "room_left",
-      "label": "Bedroom",
-      "area_m2": 9.45,
-      "material": "wood",
-      "ha_area": "bedroom",
-      "assuming_name": false,
-      "assuming_area": false
+      "area_id": "living_room",
+      "label": "Living Room",
+      "object_id": "room_living_room",
+      "width_m": 6.0,
+      "depth_m": 4.6
     },
     {
-      "number": 2,
-      "object_id": "room_kitchen",
+      "area_id": "kitchen",
       "label": "Kitchen",
-      "area_m2": 14.0,
-      "material": "tile",
-      "ha_area": "kitchen",
-      "assuming_name": false,
-      "assuming_area": false
+      "object_id": "room_kitchen",
+      "width_m": 3.4,
+      "depth_m": 3.2
     },
     {
-      "number": 3,
-      "object_id": "room_living",
-      "label": "Living room (assumed)",
-      "area_m2": 17.12,
-      "material": "wood",
-      "ha_area": "living_room",
-      "assuming_name": true,
-      "assuming_area": false
+      "area_id": "bedroom",
+      "label": "Bedroom",
+      "object_id": "room_bedroom",
+      "width_m": 4.2,
+      "depth_m": 3.8
     },
     {
-      "number": 4,
-      "object_id": "room_corridor",
-      "label": "Corridor",
-      "area_m2": 8.91,
-      "material": "stone",
-      "ha_area": null,
-      "assuming_name": false,
-      "assuming_area": false
-    },
-    {
-      "number": 5,
-      "object_id": "room_right",
+      "area_id": "studio",
       "label": "Studio",
-      "area_m2": 16.45,
-      "material": "wood",
-      "ha_area": "studio",
-      "assuming_name": false,
-      "assuming_area": false
+      "object_id": "room_studio",
+      "width_m": 4.0,
+      "depth_m": 3.0
     },
     {
-      "number": 6,
-      "object_id": "room_ca",
-      "label": "C.A.",
-      "area_m2": 3.1,
-      "material": "tile",
-      "ha_area": null,
-      "assuming_name": false,
-      "assuming_area": false
+      "area_id": "master_bathroom",
+      "label": "Master bathroom",
+      "object_id": "room_master_bathroom",
+      "width_m": 2.0,
+      "depth_m": 2.4
     },
     {
-      "number": 7,
-      "object_id": "room_wc1",
-      "label": "WC 1",
-      "area_m2": 6.89,
-      "material": "tile",
-      "ha_area": "master_bathroom",
-      "assuming_name": false,
-      "assuming_area": false
-    },
-    {
-      "number": 8,
-      "object_id": "room_wc2",
-      "label": "WC 2",
-      "area_m2": 4.89,
-      "material": "tile",
-      "ha_area": null,
-      "assuming_name": false,
-      "assuming_area": false
-    },
-    {
-      "number": 9,
-      "object_id": "room_stairs",
-      "label": "Stairs",
-      "area_m2": 15.97,
-      "material": "stone",
-      "ha_area": null,
-      "assuming_name": false,
-      "assuming_area": false
-    },
-    {
-      "number": 10,
-      "object_id": "room_rip",
-      "label": "RIP",
-      "area_m2": 2.79,
-      "material": "stone",
-      "ha_area": null,
-      "assuming_name": false,
-      "assuming_area": false
+      "area_id": "guest_bathroom",
+      "label": "Guest bathroom",
+      "object_id": "room_guest_bathroom",
+      "width_m": 2.0,
+      "depth_m": 2.4
     }
   ],
   "lights": [
     {
       "entity": "light.living_room_ball_lamp",
-      "object_id": "light_living_room_ball_lamp",
-      "px": 740,
-      "py": 380,
-      "height_m": 2.55,
-      "room": "Living room"
-    },
-    {
-      "entity": "light.bedroom_ceiling_bulbs",
-      "object_id": "light_bedroom_ceiling_bulbs",
-      "px": 185,
-      "py": 300,
-      "height_m": 2.55,
-      "room": "Bedroom"
-    },
-    {
-      "entity": "light.bedside_lamp",
-      "object_id": "light_bedside_lamp",
-      "px": 265,
-      "py": 330,
-      "height_m": 0.62,
-      "room": "Bedroom"
+      "object_id": "light_living_room_ball_lamp"
     },
     {
       "entity": "light.mood_lights",
-      "object_id": "light_mood_lights",
-      "px": 185,
-      "py": 420,
-      "height_m": 2.55,
-      "room": "Bedroom"
+      "object_id": "light_mood_lights"
+    },
+    {
+      "entity": "light.bedroom_ceiling_bulbs",
+      "object_id": "light_bedroom_ceiling_bulbs"
+    },
+    {
+      "entity": "light.bedside_lamp",
+      "object_id": "light_bedside_lamp"
     },
     {
       "entity": "light.pc_keyboard_led_strip",
-      "object_id": "light_pc_keyboard_led_strip",
-      "px": 985,
-      "py": 380,
-      "height_m": 0.8,
-      "room": "Studio"
+      "object_id": "light_pc_keyboard_led_strip"
     }
   ],
-  "walls": 20,
-  "note": "Pixel coordinates from floorplan.jpg. Absolute scale is a placeholder; OBJ vertices are centimetres. HA area mapping and room names marked 'assuming' are provisional.",
-  "obj_units": "cm"
+  "doors": [
+    {
+      "entity": "binary_sensor.entrance_door_contact",
+      "object_id": "door_entrance"
+    },
+    {
+      "entity": "binary_sensor.balcone_lato_cucina_contact",
+      "object_id": "door_balcony"
+    }
+  ],
+  "notes": "Starter dimensions are estimates. Edit ROOMS/WALLS in make_model.py and re-run."
 }

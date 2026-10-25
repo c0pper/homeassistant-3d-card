@@ -29,6 +29,7 @@ ROOMS = [
     ("bedroom",          "Bedroom",          6.0, 3.2, 10.2, 7.0, "wood"),
     ("studio",           "Studio",           0.0, 4.6,  4.0, 7.6, "wood"),
     ("master_bathroom",  "Master bathroom",  4.0, 4.6,  6.0, 7.0, "tile"),
+    ("guest_bathroom",   "Guest bathroom",   6.0, 4.6,  8.0, 7.0, "tile"),
 ]
 
 # ---------------------------------------------------------------- walls
@@ -40,7 +41,7 @@ WALLS = [
     ("x", 9.4,  0.0,  3.2, EXT_T, [(0.80, 2.00)]),          # kitchen east, balcony door
     ("z", 3.2,  9.4, 10.2, EXT_T, []),
     ("x", 10.2, 3.2,  7.0, EXT_T, []),                      # bedroom east
-    ("z", 7.0,  4.0, 10.2, EXT_T, []),                      # south
+    ("z", 7.0,  4.0, 10.2, EXT_T, [(4.50, 5.50), (6.50, 7.50)]),  # south with windows
     ("x", 4.0,  7.0,  7.6, EXT_T, []),
     ("z", 7.6,  0.0,  4.0, EXT_T, []),                      # studio south
     ("x", 0.0,  0.0,  7.6, EXT_T, []),                      # west
@@ -58,6 +59,12 @@ LIGHTS = [
     ("light_bedroom_ceiling_bulbs",    8.60, 2.50, 4.80),
     ("light_bedside_lamp",             8.90, 0.62, 6.40),
     ("light_pc_keyboard_led_strip",    2.00, 0.78, 6.75),
+]
+
+# name, x0, z0, x1, z1, sill height, wall thickness, material
+WINDOWS = [
+    ("window_master_bathroom", 4.50, 7.00, 5.50, 7.00, 1.20, 0.20, "glass"),
+    ("window_guest_bathroom",  6.50, 7.00, 7.50, 7.00, 1.20, 0.20, "glass"),
 ]
 
 # name, x0, y0, z0, x1, y1, z1, material
@@ -166,6 +173,19 @@ class Obj:
                 n = self._n(nx, ny, nz)
                 self.lines.append(f"f {a}//{n} {b}//{n} {c}//{n} {d}//{n}")
 
+    def window(self, name, mat, x0, z0, x1, z1, sill, t):
+        """Window: thin glass pane in a wall gap."""
+        y0 = sill
+        y1 = sill + 1.20
+        # glass pane
+        self.box(f"{name}_pane", mat, (x0+x1)/2 - 0.02, y0, (z0+z1)/2 - 0.02,
+                 (x0+x1)/2 + 0.02, y1, (z0+z1)/2 + 0.02)
+        # frame
+        self.box(f"{name}_frame", "dark", x0 - 0.03, y0, z0 - 0.03,
+                 x1 + 0.03, y0 + 0.05, z1 + 0.03)
+        self.box(f"{name}_frame", "dark", x0 - 0.03, y1 - 0.05, z0 - 0.03,
+                 x1 + 0.03, y1, z1 + 0.03)
+
     def write(self, path):
         with open(path, "w", encoding="utf-8") as fh:
             fh.write("# starter home model for floor3d-card\n")
@@ -211,6 +231,14 @@ def build():
                 name = f"wall_z{coord:.1f}_x{s:.2f}_{e:.2f}".replace(".", "_")
                 obj.box(name, "wall", s, 0.0, coord - t / 2,
                         e, WALL_H, coord + t / 2)
+
+    # windows in south wall (z=7.0) for master and guest bathrooms
+    # master: x 4.5-5.5 at z=7.0, sill 1.2m
+    obj.box("window_master_bathroom_pane", "glass", 4.50, 1.20, 6.95, 5.50, 2.40, 7.05)
+    obj.box("window_master_bathroom_frame", "dark", 4.45, 1.15, 6.90, 5.55, 1.25, 7.10)
+    # guest: x 6.5-7.5 at z=7.0, sill 1.2m
+    obj.box("window_guest_bathroom_pane", "glass", 6.50, 1.20, 6.95, 7.50, 2.40, 7.05)
+    obj.box("window_guest_bathroom_frame", "dark", 6.45, 1.15, 6.90, 7.55, 1.25, 7.10)
 
     # door leaf in the entrance opening (hinged at x=1.20)
     obj.box("door_entrance", "dark", 1.20, 0.02, -0.02, 2.10, 2.05, 0.02)
