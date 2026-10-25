@@ -43,9 +43,9 @@ Numbers match `home.svg`.
 |---|---|---|---|---|---|
 | 1 | `room_left` | Bedroom | 9.4 m² | `bedroom` | confirmed (left) |
 | 2 | `room_kitchen` | Kitchen | 14.0 m² | `kitchen` | plan has `K` |
-| 3 | `room_living` | Living room \* | 17.1 m² | `living_room` | central-east split assumed |
-| 4 | `room_corridor` | Corridor | 8.9 m² | — | plan has `CORRIDOIO` |
-| 5 | `room_right` | Studio | 16.4 m² | `studio` | confirmed (right) |
+| 3 | `room_living` | Living room \* | 18.4 m² | `living_room` | central-east split assumed |
+| 4 | `room_corridor` | Corridor | 10.3 m² | — | plan has `CORRIDOIO` |
+| 5 | `room_right` | Studio | 18.1 m² | `studio` | confirmed (right) |
 | 6 | `room_ca` | C.A. (wardrobe) | 4.0 m² | — | plan label; walk-in wardrobe, door from the bedroom |
 | 7 | `room_wc1` | WC 1 | 6.9 m² | `master_bathroom` | confirmed master bath |
 | 8 | `room_wc2` | WC 2 | 4.9 m² | — | plan label |

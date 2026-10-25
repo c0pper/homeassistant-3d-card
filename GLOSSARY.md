@@ -52,7 +52,7 @@
 
 | Term | Definition | Value |
 |------|------------|-------|
-| **Wall Thickness** | Confirmed: interior walls 0.12 m; exterior walls 0.20 m. |
+| **Wall Thickness** | Confirmed: interior walls 0.14 m; exterior walls 0.28 m. |
 | **Wall Height** | 2.70 m (standard ceiling height). |
 | **Floor** | Only floor present: **Main** (5th floor). |
 
@@ -77,7 +77,7 @@ RIP is listed under [Rooms & Areas](#rooms--areas).
 - **Card type**: Custom card that renders the 3D model in the dashboard.
 - **Choice**: floor3d‑card fork (active, updated) vs original (dormant). We chose the fork.
 - **Binding**: Object‑level binding (each entity maps to one 3D object). One binding per entity.
-- **Architectural details**: Wall thickness 0.12m (interior), 0.20m (exterior); wall height 2.70m.
+- **Architectural details**: Wall thickness 0.14m (interior), 0.28m (exterior); wall height 2.70m.
 - **Locations**: Only one floor: **Main** (5th floor apartment). Rooms: Bedroom, Kitchen, Living room, Corridor, Studio, C.A. wardrobe, WC 1, WC 2, RIP.
 - **Naming**: HA entity IDs as source of truth; 3D object names mirror them.
 - **Scale**: Metric units; all dimensions in meters.
@@ -96,7 +96,7 @@ RIP is listed under [Rooms & Areas](#rooms--areas).
 |------|------------|---------|
 | **Wall (direction)** | Named by cardinal direction relative to room (e.g., north wall, south wall). |
 | **Wall (adjacency)** | Named by room connection (e.g., wall between living room and kitchen). |
-| **Wall thickness** | Confirmed: interior 0.12 m; exterior 0.20 m. |
+| **Wall thickness** | Confirmed: interior 0.14 m; exterior 0.28 m. |
 | **Wall height** | Confirmed: 2.70 m. |
 
 ## Windows, Balconies & Doors

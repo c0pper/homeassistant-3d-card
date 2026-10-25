@@ -3,12 +3,12 @@
 <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#cbd5e1"/></marker></defs>
 <text x="50" y="28" fill="#f8fafc" font-size="19" font-weight="700">3D floor-plan model — provisional layout</text>
 <text x="50" y="46" fill="#94a3b8" font-size="11">14.6 × 10.6 m · 70 px/m placeholder · OBJ vertices in cm · room numbers match the legend</text>
-<path d="M85 201 L1108 87 L1108 525 L696 525 L696 548 L370 548 L370 779 L85 779 Z" fill="#343a40" stroke="none"/>
+<path d="M85 201 L1108 87 L1108 525 L696 525 L696 553 L375 553 L375 784 L85 784 Z" fill="#343a40" stroke="none"/>
 <path d="M105 213 L314 190 L314 423 L105 423 Z" fill="#6b4f37" stroke="#a98462" stroke-width="1.2"/>
 <path d="M314 190 L590 159 L590 423 L314 423 Z" fill="#3d4b56" stroke="#7f9aad" stroke-width="1.2"/>
-<path d="M590 159 L860 129 L860 470 L678 470 L678 423 L590 423 Z" fill="#6b4f37" stroke="#a98462" stroke-width="1.2"/>
-<path d="M314 423 L678 423 L678 543 L314 543 Z" fill="#4b4b47" stroke="#7f7f75" stroke-width="1.2"/>
-<path d="M860 129 L1088 104 L1088 470 L860 470 Z" fill="#6b4f37" stroke="#a98462" stroke-width="1.2"/>
+<path d="M590 159 L860 129 L860 505 L678 505 L678 423 L590 423 Z" fill="#6b4f37" stroke="#a98462" stroke-width="1.2"/>
+<path d="M257 423 L678 423 L678 543 L257 543 Z" fill="#4b4b47" stroke="#7f7f75" stroke-width="1.2"/>
+<path d="M860 129 L1088 104 L1088 505 L860 505 Z" fill="#6b4f37" stroke="#a98462" stroke-width="1.2"/>
 <path d="M105 423 L257 423 L257 552 L105 552 Z" fill="#3d4b56" stroke="#7f9aad" stroke-width="1.2"/>
 <path d="M105 552 L257 552 L257 774 L105 774 Z" fill="#3d4b56" stroke="#7f9aad" stroke-width="1.2"/>
 <path d="M257 552 L365 552 L365 774 L257 774 Z" fill="#3d4b56" stroke="#7f9aad" stroke-width="1.2"/>
@@ -37,30 +37,30 @@
 <line x1="891.1" y1="121.0" x2="961.1" y2="113.2" stroke="#45c4e8" stroke-width="5"/>
 <line x1="981.1" y1="111.0" x2="1041.1" y2="104.3" stroke="#45c4e8" stroke-width="5"/>
 <line x1="1098.2" y1="87.0" x2="1098.2" y2="525.0" stroke="#e5edf7" stroke-width="19.6" stroke-linecap="butt"/>
-<line x1="1108.0" y1="497.5" x2="696.0" y2="497.5" stroke="#e5edf7" stroke-width="55.0" stroke-linecap="butt"/>
-<line x1="960.0" y1="497.5" x2="890.0" y2="497.5" stroke="#45c4e8" stroke-width="5"/>
-<line x1="687.0" y1="470.0" x2="687.0" y2="543.0" stroke="#e5edf7" stroke-width="19.6" stroke-linecap="butt"/>
-<line x1="95.0" y1="779.0" x2="95.0" y2="201.0" stroke="#e5edf7" stroke-width="20.0" stroke-linecap="butt"/>
+<line x1="1108.0" y1="515.2" x2="696.0" y2="515.2" stroke="#e5edf7" stroke-width="19.6" stroke-linecap="butt"/>
+<line x1="960.0" y1="515.2" x2="890.0" y2="515.2" stroke="#45c4e8" stroke-width="5"/>
+<line x1="687.0" y1="505.4" x2="687.0" y2="543.0" stroke="#e5edf7" stroke-width="19.6" stroke-linecap="butt"/>
+<line x1="95.0" y1="784.0" x2="95.0" y2="201.0" stroke="#e5edf7" stroke-width="19.6" stroke-linecap="butt"/>
 <line x1="85.0" y1="423.0" x2="314.0" y2="423.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
 <line x1="123.5" y1="423.0" x2="186.5" y2="423.0" stroke="#f2b84b" stroke-width="5"/>
 <line x1="260.0" y1="423.0" x2="310.0" y2="423.0" stroke="#f2b84b" stroke-width="5"/>
-<line x1="314.0" y1="195.0" x2="314.0" y2="479.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
+<line x1="314.0" y1="195.0" x2="314.0" y2="423.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
 <line x1="257.0" y1="423.0" x2="257.0" y2="552.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
 <line x1="105.0" y1="552.0" x2="365.0" y2="552.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
 <line x1="140.0" y1="552.0" x2="190.0" y2="552.0" stroke="#f2b84b" stroke-width="5"/>
 <line x1="270.0" y1="552.0" x2="320.0" y2="552.0" stroke="#f2b84b" stroke-width="5"/>
 <line x1="257.0" y1="552.0" x2="257.0" y2="774.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
-<line x1="365.0" y1="552.0" x2="365.0" y2="779.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
+<line x1="365.0" y1="552.0" x2="365.0" y2="784.0" stroke="#e5edf7" stroke-width="19.6" stroke-linecap="butt"/>
 <line x1="105.0" y1="774.0" x2="365.0" y2="774.0" stroke="#e5edf7" stroke-width="19.6" stroke-linecap="butt"/>
 <line x1="146.0" y1="774.0" x2="216.0" y2="774.0" stroke="#45c4e8" stroke-width="5"/>
 <line x1="276.0" y1="774.0" x2="346.0" y2="774.0" stroke="#45c4e8" stroke-width="5"/>
-<line x1="314.0" y1="543.0" x2="687.0" y2="543.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
+<line x1="257.0" y1="543.0" x2="687.0" y2="543.0" stroke="#e5edf7" stroke-width="19.6" stroke-linecap="butt"/>
 <line x1="590.0" y1="543.0" x2="670.0" y2="543.0" stroke="#f2b84b" stroke-width="5"/>
 <line x1="460.0" y1="360.0" x2="460.0" y2="479.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
 <line x1="460.0" y1="360.0" x2="575.0" y2="360.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
 <line x1="575.0" y1="360.0" x2="575.0" y2="479.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
 <line x1="575.0" y1="385.0" x2="575.0" y2="445.0" stroke="#f2b84b" stroke-width="5"/>
-<line x1="860.0" y1="133.0" x2="860.0" y2="470.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
+<line x1="860.0" y1="133.0" x2="860.0" y2="505.0" stroke="#e5edf7" stroke-width="9.8" stroke-linecap="butt"/>
 <line x1="860.0" y1="400.0" x2="860.0" y2="460.0" stroke="#f2b84b" stroke-width="5"/>
 <circle cx="195" cy="250" r="9" fill="#0b1220" stroke="#f8fafc" stroke-width="1.5"/>
 <text x="195" y="253" fill="#f8fafc" font-size="8" font-weight="700" text-anchor="middle">1</text>
@@ -73,15 +73,15 @@
 <circle cx="810" cy="190" r="9" fill="#0b1220" stroke="#f8fafc" stroke-width="1.5"/>
 <text x="810" y="193" fill="#f8fafc" font-size="8" font-weight="700" text-anchor="middle">3</text>
 <text x="823" y="191" fill="#f8fafc" font-size="9" font-weight="700">Living room</text>
-<text x="823" y="201" fill="#94a3b8" font-size="7.5">17.1 m²</text>
+<text x="823" y="201" fill="#94a3b8" font-size="7.5">18.4 m²</text>
 <circle cx="360" cy="500" r="9" fill="#0b1220" stroke="#f8fafc" stroke-width="1.5"/>
 <text x="360" y="503" fill="#f8fafc" font-size="8" font-weight="700" text-anchor="middle">4</text>
 <text x="373" y="501" fill="#f8fafc" font-size="9" font-weight="700">Corridor</text>
-<text x="373" y="511" fill="#94a3b8" font-size="7.5">8.9 m²</text>
+<text x="373" y="511" fill="#94a3b8" font-size="7.5">10.3 m²</text>
 <circle cx="985" cy="175" r="9" fill="#0b1220" stroke="#f8fafc" stroke-width="1.5"/>
 <text x="985" y="178" fill="#f8fafc" font-size="8" font-weight="700" text-anchor="middle">5</text>
 <text x="998" y="176" fill="#f8fafc" font-size="9" font-weight="700">Studio</text>
-<text x="998" y="186" fill="#94a3b8" font-size="7.5">16.4 m²</text>
+<text x="998" y="186" fill="#94a3b8" font-size="7.5">18.1 m²</text>
 <circle cx="175" cy="460" r="9" fill="#0b1220" stroke="#f8fafc" stroke-width="1.5"/>
 <text x="175" y="463" fill="#f8fafc" font-size="8" font-weight="700" text-anchor="middle">6</text>
 <text x="188" y="461" fill="#f8fafc" font-size="9" font-weight="700">C.A. (wardrobe)</text>
@@ -118,13 +118,13 @@
 <text x="1462" y="114" fill="#94a3b8" font-size="9" text-anchor="end">14.0 m²</text>
 <rect x="1198" y="123" width="10" height="10" rx="2" fill="#6b4f37" stroke="#a98462" stroke-width="0.8"/>
 <text x="1216" y="132" fill="#e2e8f0" font-size="10">3&#160;&#160;Living room *</text>
-<text x="1462" y="132" fill="#94a3b8" font-size="9" text-anchor="end">17.1 m²</text>
+<text x="1462" y="132" fill="#94a3b8" font-size="9" text-anchor="end">18.4 m²</text>
 <rect x="1198" y="141" width="10" height="10" rx="2" fill="#4b4b47" stroke="#7f7f75" stroke-width="0.8"/>
 <text x="1216" y="150" fill="#e2e8f0" font-size="10">4&#160;&#160;Corridor</text>
-<text x="1462" y="150" fill="#94a3b8" font-size="9" text-anchor="end">8.9 m²</text>
+<text x="1462" y="150" fill="#94a3b8" font-size="9" text-anchor="end">10.3 m²</text>
 <rect x="1198" y="159" width="10" height="10" rx="2" fill="#6b4f37" stroke="#a98462" stroke-width="0.8"/>
 <text x="1216" y="168" fill="#e2e8f0" font-size="10">5&#160;&#160;Studio</text>
-<text x="1462" y="168" fill="#94a3b8" font-size="9" text-anchor="end">16.4 m²</text>
+<text x="1462" y="168" fill="#94a3b8" font-size="9" text-anchor="end">18.1 m²</text>
 <rect x="1198" y="177" width="10" height="10" rx="2" fill="#3d4b56" stroke="#7f9aad" stroke-width="0.8"/>
 <text x="1216" y="186" fill="#e2e8f0" font-size="10">6&#160;&#160;C.A. (wardrobe)</text>
 <text x="1462" y="186" fill="#94a3b8" font-size="9" text-anchor="end">4.0 m²</text>

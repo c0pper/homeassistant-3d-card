@@ -44,15 +44,15 @@ def P(px, py):
 
 # ---------------------------------------------------------------- floor polygons
 # full outer footprint: the slab runs under the exterior walls
-BASE = [(95, 246), (1118, 132), (1118, 570), (706, 570), (706, 593), (380, 593), (380, 824), (95, 824)]
+BASE = [(95, 246), (1118, 132), (1118, 570), (706, 570), (706, 598), (385, 598), (385, 829), (95, 829)]
 
 ROOMS = [
     # id, label, polygon (px), floor material
     ("room_left", "Bedroom", [(115, 258), (324, 235), (324, 468), (115, 468)], "wood"),
     ("room_kitchen", "Kitchen", [(324, 235), (600, 204), (600, 468), (324, 468)], "tile"),
-    ("room_living", "Living room (assumed)", [(600, 204), (870, 174), (870, 515), (688, 515), (688, 468), (600, 468)], "wood"),
-    ("room_corridor", "Corridor", [(324, 468), (688, 468), (688, 588), (324, 588)], "stone"),
-    ("room_right", "Studio", [(870, 174), (1098, 149), (1098, 515), (870, 515)], "wood"),
+    ("room_living", "Living room (assumed)", [(600, 204), (870, 174), (870, 550), (688, 550), (688, 468), (600, 468)], "wood"),
+    ("room_corridor", "Corridor", [(267, 468), (688, 468), (688, 588), (267, 588)], "stone"),
+    ("room_right", "Studio", [(870, 174), (1098, 149), (1098, 550), (870, 550)], "wood"),
     ("room_ca", "C.A. (wardrobe)", [(115, 468), (267, 468), (267, 597), (115, 597)], "tile"),
     ("room_wc1", "WC 1", [(115, 597), (267, 597), (267, 819), (115, 819)], "tile"),
     ("room_wc2", "WC 2", [(267, 597), (375, 597), (375, 819), (267, 819)], "tile"),
@@ -88,35 +88,37 @@ WALLS = [
         (top_d(990), top_d(1050), "window"),
     ]),
     ("right", P(1108.2, 132), P(1108.2, 570), EXT_T, []),
-    ("right_bottom", P(1118, 542.5), P(706, 542.5), 0.786, [
+    # south wall of living room and studio: one thickness with the rest,
+    # outer face kept at py 570 so the rooms gain the old wall's depth
+    ("right_bottom", P(1118, 560.2), P(706, 560.2), EXT_T, [
         (right_bottom_d(970), right_bottom_d(900), "window"),
     ]),
     # east wall of the corridor, closing the apartment where the stair block was
-    ("corridor_east", P(697, 515), P(697, 588), EXT_T, []),
-    ("left", P(105, 824), P(105, 246), 0.286, []),
+    ("corridor_east", P(697, 550.4), P(697, 588), EXT_T, []),
+    ("left", P(105, 829), P(105, 246), EXT_T, []),
     # interior
     # wardrobe room: door moved to the north wall (from the bedroom)
     ("left_south", P(95, 468), P(324, 468), INT_T, [
         (0.55, 1.45, "door"),
         (M(175), M(225), "door"),
     ]),
-    ("left_east", P(324, 240), P(324, 524), INT_T, []),
+    ("left_east", P(324, 240), P(324, 468), INT_T, []),
     ("ca_east", P(267, 468), P(267, 597), INT_T, []),
     ("wc_north", P(115, 597), P(375, 597), INT_T, [(M(35), M(85), "door"), (M(165), M(215), "door")]),
     ("wc_div", P(267, 597), P(267, 819), INT_T, []),
-    ("wc_east", P(375, 597), P(375, 824), INT_T, []),
+    ("wc_east", P(375, 597), P(375, 829), EXT_T, []),
     # south wall of the two bathrooms, now the apartment boundary: the two
     # windows that used to sit on the removed stairwell wall live here
     ("wc_south", P(115, 819), P(375, 819), EXT_T, [
         (0.586, 1.586, "window"),
         (2.443, 3.443, "window"),
     ]),
-    # main entrance door to the apartment
-    ("corridor_south", P(324, 588), P(697, 588), INT_T, [(M(276), M(356), "door")]),
+    # main entrance door to the apartment (x 600-680 in the plan)
+    ("corridor_south", P(267, 588), P(697, 588), EXT_T, [(M(333), M(413), "door")]),
     ("rip_west", P(470, 405), P(470, 524), INT_T, []),
     ("rip_north", P(470, 405), P(585, 405), INT_T, []),
     ("rip_east", P(585, 405), P(585, 524), INT_T, [(M(25), M(85), "door")]),
-    ("right_west", P(870, 178), P(870, 515), INT_T, [(M(267), M(327), "door")]),
+    ("right_west", P(870, 178), P(870, 550), INT_T, [(M(267), M(327), "door")]),
 ]
 
 # ---------------------------------------------------------------- lights
