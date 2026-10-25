@@ -39,7 +39,7 @@ Home Assistant dashboard **Home 3D** (`home-3d`).
 |---|---|
 | Model commit | `0b3b367` |
 | Model base URL | `https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/0b3b367/` |
-| Custom card resource | `https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@9ce4c39/custom-card/floor3d-card.js` |
+| Custom card resource | `https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@020e4b1/custom-card/floor3d-card.js` |
 | Dashboard card type | `custom:floor3d-card-sims` |
 | Wall mode | `sims` |
 

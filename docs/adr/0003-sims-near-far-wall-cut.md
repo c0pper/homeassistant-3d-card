@@ -36,7 +36,7 @@ looks hollow at 20 cm.
   serves `.js` as `text/plain`, which browsers reject for module
   resources. The model OBJ/MTL remains on raw GitHub.
 - The model path is pinned to model commit `0b3b367`; the custom card
-  resource is pinned to custom-card commit `9ce4c39`.
+  resource is pinned to custom-card commit `020e4b1`.
 
 ## Consequences
 

@@ -16,7 +16,7 @@ The dashboard loads the model **from the public GitHub repo** through
   reliably bypass it (tested); a commit-SHA URL is immutable and served
   immediately. Update the path to the new SHA after each model push.
 - The custom card JS is a second module resource, served by jsDelivr:
-  `https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@9ce4c39/custom-card/floor3d-card.js`.
+  `https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@020e4b1/custom-card/floor3d-card.js`.
   It registers `floor3d-card-sims`; the HACS `floor3d-card` resource
   stays installed and shares its editor. Raw GitHub serves `.js` as
   `text/plain`, which browsers reject for modules, hence jsDelivr.
@@ -44,7 +44,7 @@ git rev-parse --short HEAD
 # path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/<sha>/
 ```
 
-The current model commit is `0b3b367`; the custom card commit is `9ce4c39`. `objfile` and `mtlfile` stay
+The current model commit is `0b3b367`; the custom card commit is `020e4b1`. `objfile` and `mtlfile` stay
 plain names.
 
 If `custom-card/` changes, rebuild it with the instructions in
