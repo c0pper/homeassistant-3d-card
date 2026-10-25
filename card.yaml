@@ -34,7 +34,10 @@ north:
 click: 'yes'
 # sims: near walls show the closed 20 cm stub, far walls stay full.
 # The split at 20 cm is baked into home.obj (wall_sims_low_*/wall_sims_high_*).
+# A wall also drops when its horizontal distance to the camera is within
+# walls_near_distance x the camera-target distance (edge-on internal walls).
 walls: sims
+walls_near_distance: 1.35
 camera_position:
   x: 0
   y: 1500

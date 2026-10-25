@@ -30,6 +30,10 @@ looks hollow at 20 cm.
   so short pieces between windows/balconies and corner pillars drop with
   their wall. A group with no usable normal falls back to the outward
   radial direction.
+- A wall also drops when its horizontal distance to the camera is less
+  than `walls_near_distance` (1.35) times the horizontal
+  camera-to-target distance. This catches edge-on internal and side
+  walls in a three-quarter view; it is configurable.
 - The change is a **snap** (no animation).
 - Straight above there is no horizontal camera side, so all walls stay
   full.
@@ -41,7 +45,7 @@ looks hollow at 20 cm.
   serves `.js` as `text/plain`, which browsers reject for module
   resources. The model OBJ/MTL remains on raw GitHub.
 - The model path is pinned to model commit `fb54b9a`; the custom card
-  resource is pinned to custom-card commit `1860ac9`.
+  resource is pinned to custom-card commit `e822865`.
 
 ## Consequences
 

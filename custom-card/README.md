@@ -19,7 +19,10 @@ same facing rule as `fade`:
   balconies and corner pillars drop with their wall. A group with no
   usable normal falls back to the outward radial direction.
 - A wall is near when its outward side faces the camera
-  (`normal · camera_side > 0.3`); its high part is hidden. Far walls show
+  (`normal · camera_side > 0.3`); its high part is hidden. It is also
+  near when its horizontal distance to the camera is less than
+  `walls_near_distance` (1.35) x the horizontal camera-to-target
+  distance, which catches edge-on internal and side walls. Far walls show
   both parts. Straight above, no wall is near, so all walls stay full.
 - Near window/balcony glass is split too (`wall_sims_glass_low_*` /
   `wall_sims_glass_high_*`); its high part is hidden with the wall.
@@ -62,7 +65,7 @@ use jsDelivr with the commit that contains this folder:
 
 ```yaml
 # dashboard resource, type module
-https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@1860ac9/custom-card/floor3d-card.js
+https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@e822865/custom-card/floor3d-card.js
 ```
 
 The entry imports `./floor3d-card-core-<hash>.js` and the editor chunk
@@ -81,7 +84,7 @@ npm run build
 ```
 
 Then copy `dist/*` here. The card version string is
-`v2.13.2-sims.4`.
+`v2.13.2-sims.5`.
 
 ## Upstream
 

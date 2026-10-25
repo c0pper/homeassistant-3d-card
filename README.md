@@ -39,7 +39,7 @@ Home Assistant dashboard **Home 3D** (`home-3d`).
 |---|---|
 | Model commit | `fb54b9a` |
 | Model base URL | `https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/fb54b9a/` |
-| Custom card resource | `https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@1860ac9/custom-card/floor3d-card.js` |
+| Custom card resource | `https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@e822865/custom-card/floor3d-card.js` |
 | Dashboard card type | `custom:floor3d-card-sims` |
 | Wall mode | `sims` |
 
@@ -91,6 +91,15 @@ camera (`normal · camera_side > 0.3`), the high part is hidden; the low
 part remains. Far walls keep both parts and look full. The rule handles
 corners — both adjacent facades drop — and applies to **exterior and
 interior** walls. Near glass drops with its wall.
+
+A wall also drops when its **horizontal distance to the camera** is less
+than `walls_near_distance` × the horizontal camera-to-target distance.
+The default is **1.35**. This catches edge-on internal walls and side
+walls (for example the bathroom divider, the bedroom/kitchen wall and
+the west exterior) that would otherwise stay full in a three-quarter
+view. Set `walls_near_distance` higher to cut more of the near side,
+lower to cut less. Straight above, the target distance is zero, so no
+wall is near and all stay full.
 
 Wall pieces are named `wall_sims_high_<wall line>_<piece>` (and
 `wall_sims_glass_high_<wall line>_<piece>`). The card groups every piece
