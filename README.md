@@ -46,17 +46,18 @@ The repo is public: `c0pper/homeassistant-3d-card`. GitHub raw serves
 the files with `Access-Control-Allow-Origin: *`, which the card needs.
 
 ```yaml
-path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/master/
-objfile: home.obj?v=2026-10-25-low
-mtlfile: home.mtl?v=2026-10-25-low
+path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/15dd34b/
+objfile: home.obj
+mtlfile: home.mtl
 ```
 
 - The card appends `objfile` / `mtlfile` to `path`, so the actual URLs are
-  `.../master/home.obj?v=...` and `.../master/home.mtl?v=...`.
-- The `?v=` query is a cache-buster. Raw GitHub caches for about five
-  minutes; changing the version makes the browser and CDN fetch the new
-  file. The card explicitly handles a `?` in `objfile`
-  (`fileExt = objfile.split('?')[0]...`).
+  `.../15dd34b/home.obj` and `.../15dd34b/home.mtl`.
+- **Pin the path to the commit that contains the model**, not to
+  `master`. Raw GitHub caches a branch for about five minutes and, as
+  tested here, a `?v=` query does not reliably bypass that cache. A
+  commit-SHA URL is immutable and served immediately; the cost is that
+  each model change needs the path updated to the new commit.
 - The model is loaded in the **browser**, not by Home Assistant, so the
   device showing the dashboard must be able to reach GitHub. Public
   GitHub is normally reachable; no token is needed.
@@ -80,9 +81,17 @@ git commit -m "Describe the model change"
 git push origin master
 ```
 
-Then bump the `?v=` value in `card.yaml` and in the dashboard card
-(`objfile` and `mtlfile`) so the browser does not keep the old OBJ/MTL.
-The current value is **`2026-10-25-low`**.
+Then read the new commit:
+
+```bash
+git rev-parse --short HEAD
+```
+
+and set the dashboard card's `path` to
+`https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/<sha>/`
+(the same value in `card.yaml`). The current model commit is
+**`15dd34b`**. Pinning the commit avoids the raw `master` cache;
+`objfile` and `mtlfile` stay plain names.
 
 ## Room mapping
 
@@ -149,8 +158,8 @@ card will show the lamp off until the entity is available.
 ## Local development (LAN only)
 
 For faster iteration when the browser and this machine are on the same
-LAN, switch the card `path` back to `http://192.168.1.4:8765/` and drop
-the `?v=` query from `objfile`/`mtlfile`:
+LAN, switch the card `path` back to `http://192.168.1.4:8765/`; keep
+`objfile` and `mtlfile` as plain names:
 
 ```bash
 cd /home/simo/floor3d-starter
@@ -173,7 +182,7 @@ If you later want the model served by Home Assistant itself:
 
 1. Create `/config/www/floor3d/`.
 2. Upload `home.obj` and `home.mtl` into it.
-3. Set `path: /local/floor3d/` and remove the `?v=` queries.
+3. Set `path: /local/floor3d/`.
 4. Hard-refresh (Ctrl+Shift+R). The card caches OBJ/MTL.
 
 This is no longer required for remote use; the GitHub raw path works

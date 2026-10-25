@@ -103,9 +103,9 @@ RIP is listed under [Rooms & Areas](#rooms--areas).
 
 | Term | Definition | Example |
 |------|------------|---------|
-| **Window** | Separate 3D object, named like `window.living_room`, `window.kitchen`. Can be linked to sensors. |
-| **Balcony** | Separate 3D object, named like `balcony.kitchen`, `balcony.studio`. Two are modelled on the north wall: `balcony_living` (over both living-room doors) and `balcony_kitchen` (over both kitchen doors), each a slab with a glass parapet and a dark handrail. |
-| **Door (opening)** | Separate 3D object linked to binary sensors (`binary_sensor.entrance_door_contact`). Can represent open/closed states in 3D. |
+| **Window** | Glass pane object named `wall_glass_*` so that the card's `walls: low` clipping cuts it with the wall. The opening itself is a `window` opening in a `wall_*` object. | `wall_glass_034` |
+| **Balcony** | Separate 3D object, named like `balcony.kitchen`, `balcony.studio`. Two are modelled on the north wall: `balcony_kitchen` (over both kitchen doors, x 350–515) and `balcony_living` (over both living-room doors, x 600–760), each a slab with a glass parapet and a dark handrail. Each balcony has two full-height glass door panes, objects `wall_glass_balcony_*`, clipped with the walls in `low` mode. | `balcony_kitchen_slab` |
+| **Door (opening)** | Opening in a wall object, not a hinged leaf yet. The main entrance is an opening in `corridor_south`; the balcony openings are in the `top` wall. The door contacts are not bound. | `corridor_south` |
 
 ## Performance Concepts
 

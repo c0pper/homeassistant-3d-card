@@ -8,11 +8,12 @@ The dashboard loads the model **from the public GitHub repo** through
 `raw.githubusercontent.com`, so it works off the LAN:
 
 - Dashboard: `home-3d` (storage mode), card `custom:floor3d-card` with
-  `path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/master/`.
-- Card model files:
-  `objfile: home.obj?v=<version>` and `mtlfile: home.mtl?v=<version>`.
-  The `?v=` query busts the ~5 minute raw-GitHub cache. The card handles
-  a query in `objfile` (`fileExt = objfile.split('?')[0]...`).
+  `path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/15dd34b/`.
+- Card model files: `objfile: home.obj`, `mtlfile: home.mtl`.
+  The path is **pinned to the commit that contains the model**. Raw
+  GitHub caches a branch for ~5 minutes and a `?v=` query does not
+  reliably bypass it (tested); a commit-SHA URL is immutable and served
+  immediately. Update the path to the new SHA after each model push.
 - GitHub raw sends `Access-Control-Allow-Origin: *`; the browser (not
   Home Assistant) fetches the OBJ/MTL, so the device showing the
   dashboard needs internet access. No HA token is involved.
@@ -29,8 +30,16 @@ git commit -m "Describe the model change"
 git push origin master
 ```
 
-Then bump the `?v=` value in `card.yaml` and the dashboard card.
-The current value is `2026-10-25-low`.
+Then update the card path in `card.yaml` and the dashboard to the new
+commit:
+
+```sh
+git rev-parse --short HEAD
+# path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/<sha>/
+```
+
+The current model commit is `15dd34b`. `objfile` and `mtlfile` stay
+plain names.
 
 ### Local development fallback
 

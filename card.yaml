@@ -1,13 +1,15 @@
 # Card for the floor-plan model.
-# Remote setup (current): model fetched from the public GitHub repo.
+# Remote setup (current): model pinned to the commit that contains it.
+# raw.githubusercontent.com caches master for ~5 min and ignores ?v=;
+# a commit SHA URL is immutable and available immediately.
 # Local dev on the LAN: set path: http://192.168.1.4:8765/
 # Permanent HA-local setup: copy home.obj + home.mtl to /config/www/floor3d/
-# and set path: /local/floor3d/ (drop the ?v= query).
+# and set path: /local/floor3d/.
 type: custom:floor3d-card
 name: Home 3D
-path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/master/
-objfile: home.obj?v=2026-10-25-low
-mtlfile: home.mtl?v=2026-10-25-low
+path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/15dd34b/
+objfile: home.obj
+mtlfile: home.mtl
 header: 'no'
 backgroundColor: sky
 exposure: 1.15
