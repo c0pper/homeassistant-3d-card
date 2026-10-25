@@ -83,18 +83,8 @@
     },
     {
       "number": 9,
-      "object_id": "room_stairs",
-      "label": "Stairs",
-      "area_m2": 15.97,
-      "material": "stone",
-      "ha_area": null,
-      "assuming_name": false,
-      "assuming_area": false
-    },
-    {
-      "number": 10,
       "object_id": "room_rip",
-      "label": "RIP",
+      "label": "RIP (storage)",
       "area_m2": 2.79,
       "material": "stone",
       "ha_area": null,
@@ -144,7 +134,7 @@
       "room": "Studio"
     }
   ],
-  "walls": 20,
+  "walls": 18,
   "note": "Pixel coordinates from floorplan.jpg. Absolute scale is a placeholder; OBJ vertices are centimetres. HA area mapping and room names marked 'assuming' are provisional.",
   "obj_units": "cm"
 }

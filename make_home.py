@@ -44,7 +44,7 @@ def P(px, py):
 
 # ---------------------------------------------------------------- floor polygons
 # full outer footprint: the slab runs under the exterior walls
-BASE = [(95, 246), (1118, 132), (1118, 570), (706, 570), (706, 876), (95, 876)]
+BASE = [(95, 246), (1118, 132), (1118, 570), (706, 570), (706, 593), (380, 593), (380, 824), (95, 824)]
 
 ROOMS = [
     # id, label, polygon (px), floor material
@@ -56,8 +56,7 @@ ROOMS = [
     ("room_ca", "C.A.", [(115, 468), (267, 468), (267, 568), (115, 568)], "tile"),
     ("room_wc1", "WC 1", [(115, 597), (267, 597), (267, 819), (115, 819)], "tile"),
     ("room_wc2", "WC 2", [(267, 597), (375, 597), (375, 819), (267, 819)], "tile"),
-    ("room_stairs", "Stairs", [(375, 588), (688, 588), (688, 838), (375, 838)], "stone"),
-    ("room_rip", "RIP", [(470, 405), (585, 405), (585, 524), (470, 524)], "stone"),
+    ("room_rip", "RIP (storage)", [(470, 405), (585, 405), (585, 524), (470, 524)], "stone"),
 ]
 
 # ---------------------------------------------------------------- walls
@@ -65,10 +64,6 @@ ROOMS = [
 def top_d(px):
     length = math.hypot(1118 - 95, 132 - 246)
     return (px - 95) / (1118 - 95) * length / SCALE
-
-
-def bottom_d(px):
-    return (706.0 - px) / SCALE
 
 
 def right_bottom_d(px):
@@ -96,14 +91,9 @@ WALLS = [
     ("right_bottom", P(1118, 542.5), P(706, 542.5), 0.786, [
         (right_bottom_d(970), right_bottom_d(900), "window"),
     ]),
-    ("lower_east", P(697, 570), P(697, 876), 0.257, []),
-    ("bottom", P(706, 857), P(95, 857), 0.543, [
-        (bottom_d(670), bottom_d(600), "window"),
-        (bottom_d(490), bottom_d(420), "window"),
-        (bottom_d(355), bottom_d(285), "window"),
-        (bottom_d(220), bottom_d(150), "window"),
-    ]),
-    ("left", P(105, 876), P(105, 246), 0.286, []),
+    # east wall of the corridor, closing the apartment where the stair block was
+    ("corridor_east", P(697, 515), P(697, 588), EXT_T, []),
+    ("left", P(105, 824), P(105, 246), 0.286, []),
     # interior
     ("left_south", P(95, 468), P(324, 468), INT_T, [(M(175), M(225), "door")]),
     ("left_east", P(324, 240), P(324, 524), INT_T, []),
@@ -112,9 +102,14 @@ WALLS = [
     ("wc_north", P(115, 597), P(375, 597), INT_T, [(M(35), M(85), "door"), (M(165), M(215), "door")]),
     ("wc_div", P(267, 597), P(267, 819), INT_T, []),
     ("wc_east", P(375, 597), P(375, 838), INT_T, []),
-    ("wc_south", P(115, 819), P(375, 819), INT_T, []),
-    ("corridor_south", P(324, 588), P(688, 588), INT_T, [(M(276), M(356), "door")]),
-    ("stair_east", P(688, 588), P(688, 838), INT_T, []),
+    # south wall of the two bathrooms, now the apartment boundary: the two
+    # windows that used to sit on the removed stairwell wall live here
+    ("wc_south", P(115, 819), P(375, 819), EXT_T, [
+        (0.586, 1.586, "window"),
+        (2.443, 3.443, "window"),
+    ]),
+    # main entrance door to the apartment
+    ("corridor_south", P(324, 588), P(697, 588), INT_T, [(M(276), M(356), "door")]),
     ("rip_west", P(470, 405), P(470, 524), INT_T, []),
     ("rip_north", P(470, 405), P(585, 405), INT_T, []),
     ("rip_east", P(585, 405), P(585, 524), INT_T, [(M(25), M(85), "door")]),
@@ -402,17 +397,6 @@ def build():
     # walls
     for name, p1, p2, t, openings in WALLS:
         add_wall(obj, name, p1, p2, t, openings)
-    # stairs: straight flight, 14 steps, rising south from the corridor door
-    x0, x1 = X(458), X(610)
-    z0, z1 = Z(588), Z(838)
-    steps = 14
-    for i in range(steps):
-        za = z0 + (z1 - z0) * i / steps
-        zb = z0 + (z1 - z0) * (i + 1) / steps
-        obj.box(f"stair_{i + 1:02d}", "stone", x0, 0.0, za, x1, H * (i + 1) / steps, zb)
-    # stair railings
-    obj.box("stair_rail_left", "dark", x0 - 0.04, 0.0, z0, x0, 1.05, z1)
-    obj.box("stair_rail_right", "dark", x1, 0.0, z0, x1 + 0.04, 1.05, z1)
     # lights
     for name, px, py, y, kind in LIGHTS:
         if kind == "sphere":
@@ -519,16 +503,6 @@ def preview():
             parts.append(f'<line x1="{wx(ax):.1f}" y1="{wy(az):.1f}" x2="{wx(bx):.1f}" y2="{wy(bz):.1f}" '
                          f'stroke="{color}" stroke-width="5"/>')
 
-    # stairs
-    x0, x1 = 458, 610
-    z0, z1 = 588, 838
-    for i in range(15):
-        z = z0 + (z1 - z0) * i / 14
-        parts.append(f'<line x1="{px(x0)}" y1="{py(z)}" x2="{px(x1)}" y2="{py(z)}" stroke="#cbd5e1" stroke-width="0.8"/>')
-    parts.append(f'<line x1="{px(534)}" y1="{py(610)}" x2="{px(534)}" y2="{py(820)}" stroke="#cbd5e1" '
-                 f'stroke-width="1.3" stroke-dasharray="4 4" marker-end="url(#arrow)"/>')
-    parts.append(f'<text x="{px(544)}" y="{py(700)}" fill="#cbd5e1" font-size="9">UP</text>')
-
     # room markers (numbers refer to the legend)
     roo_pos = {
         "room_left": (205, 295),
@@ -539,7 +513,6 @@ def preview():
         "room_ca": (185, 505),
         "room_wc1": (185, 690),
         "room_wc2": (315, 690),
-        "room_stairs": (405, 645),
         "room_rip": (522, 462),
     }
     room_rows = []
@@ -714,7 +687,6 @@ def main():
         "room_wc2": None,
         "room_ca": None,
         "room_corridor": None,
-        "room_stairs": None,
         "room_rip": None,
     }
     rooms = []

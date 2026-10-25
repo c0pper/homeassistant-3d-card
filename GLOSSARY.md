@@ -57,7 +57,14 @@
 
 | Term | Definition | Value |
 |------|------------|-------|
-| **Stairwell** | Outdoor area adjacent to the stairs, accessible from the Main floor. | — |
+| **Stairwell** | The common stairwell outside the apartment, beyond the main entrance. Outside the apartment boundary, so it is not modelled. | — |
+| **Main entrance** | The apartment's entrance door, in the corridor's south wall (object `corridor_south`). It opens towards the stairwell landing. | — |
+
+## Storage
+
+| Term | Definition | Value |
+|------|------------|-------|
+| **RIP** | Storage room (Italian *ripostiglio*), between the living room and the corridor (object `room_rip`). Modelled and kept. | — |
 
 ## Design Decisions (to be documented in ADRs)
 
@@ -90,6 +97,9 @@
 - `light.master_bathroom_vanity` → 3D object `master_bathroom_vanity`
 - `light.kitchen_counter` → 3D object `kitchen_counter`
 - `light.living_room_ceiling` → 3D object `living_room_ceiling`
+- `stairwell` → Common stairwell outside the apartment; not modelled.
+- `main entrance` → Door in `corridor_south`, opening to the stairwell landing.
+- `rip` → Storage room (`room_rip`) between living room and corridor.
 
 ## Furniture & Placement
 

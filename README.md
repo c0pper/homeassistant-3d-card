@@ -49,13 +49,13 @@ Numbers match `home.svg`.
 | 6 | `room_ca` | C.A. | 3.1 m² | — | plan label; likely closet |
 | 7 | `room_wc1` | WC 1 | 6.9 m² | `master_bathroom` | confirmed master bath |
 | 8 | `room_wc2` | WC 2 | 4.9 m² | — | plan label |
-| 9 | `room_stairs` | Stairs | 16.0 m² | — | plan has stairs |
-| 10 | `room_rip` | RIP (storage) | 2.8 m² | — | plan has `RIP` |
+| 9 | `room_rip` | RIP (storage) | 2.8 m² | — | plan has `RIP` |
 
 HA currently has five areas: `bedroom`, `studio`, `master_bathroom` on
 floor **Main** (level 5), plus `kitchen` and `living_room` unassigned;
 the **Upstairs** floor (level 6) has no areas. Only areas relevant to
-this floor are mapped above; corridors/closets/stairs have no HA area.
+this floor are mapped above; corridors and closets have no HA area.
+The common stairwell lies outside the apartment and is not modelled.
 
 ## Lights
 
