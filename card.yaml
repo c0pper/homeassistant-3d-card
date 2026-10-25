@@ -17,6 +17,11 @@ tone_mapping: neutral
 light_power: 1
 # torch light: brighter at night (sensor.floor3d_ambient_power, 0.75 night / 0.25 day)
 globalLightPower: sensor.floor3d_ambient_power
+# the in-card AUTO / DAY / NIGHT button: forced modes use these torch values and exposure
+day_globalLightPower: 0.25
+night_globalLightPower: 0.75
+day_exposure: 1.15
+night_exposure: 1.0
 sun: 'yes'
 sun_power: 1
 sky_power: 0.55

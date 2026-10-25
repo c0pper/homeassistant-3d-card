@@ -39,6 +39,7 @@
 | **Entity ID** | The HA entity ID (e.g., `light.living_room_ball_lamp`). |
 | **Naming Convention** | Use `room_<type>_<feature>` for 3D objects (e.g., `living_room_light`, `kitchen_counter`, `bedroom_ceiling`). **Resolution**: 3D object names mirror HA entity IDs directly (e.g., `light.living_room_ball_lamp` → `living_room_ball_lamp`); no synonyms. One-to-one mapping. | `light.living_room_ball_lamp` → `living_room_ball_lamp` |
 | **Custom card** | `custom:floor3d-card-sims`: a patched floor3d-card v2.13.2 that registers `floor3d-card-sims` and adds `walls: sims`. It is a second dashboard resource; the HACS card remains installed. | `custom:floor3d-card-sims` |
+| **Lighting mode** | The in-card AUTO / DAY / NIGHT pill. AUTO follows the real sun; DAY and NIGHT force a fixed sun/sky/torch/exposure. Appearance only; lamps are untouched. Internal to the card, resets to AUTO on reload. | `AUTO` / `DAY` / `NIGHT` |
 
 ## HA Entity Naming
 

@@ -33,6 +33,22 @@ walls: sims
 The HACS `floor3d-card` resource stays installed; the card editor is
 shared (`floor3d-card-editor`).
 
+## Lighting button
+
+The entry renders a small **AUTO / DAY / NIGHT** pill at the bottom-left
+of the model. It cycles AUTO -> DAY -> NIGHT -> AUTO:
+
+- AUTO follows `sun.sun` and `globalLightPower`;
+- DAY forces sun azimuth 180° / elevation 45°, blue sky, torch
+  `day_globalLightPower` (default 0.25), exposure `day_exposure`;
+- NIGHT forces the sun below the horizon, stars/moon, torch
+  `night_globalLightPower` (default 0.75), exposure `night_exposure`.
+
+It changes appearance only; the lamps are not touched. The mode is an
+internal field (`_lightingMode`), not an HA helper, so it resets to AUTO
+on reload. The `Environment.setManual()` method performs the override;
+the sun, sky, torch and exposure are restored in AUTO.
+
 ## Hosting
 
 The built files in this folder are loaded as a module resource. Raw
@@ -41,7 +57,7 @@ use jsDelivr with the commit that contains this folder:
 
 ```yaml
 # dashboard resource, type module
-https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@0209251/custom-card/floor3d-card.js
+https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@9ce4c39/custom-card/floor3d-card.js
 ```
 
 The entry imports `./floor3d-card-core-<hash>.js` and the editor chunk
@@ -60,7 +76,7 @@ npm run build
 ```
 
 Then copy `dist/*` here. The card version string is
-`v2.13.2-sims.1`.
+`v2.13.2-sims.2`.
 
 ## Upstream
 

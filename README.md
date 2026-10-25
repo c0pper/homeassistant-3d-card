@@ -20,6 +20,10 @@ Home Assistant dashboard **Home 3D** (`home-3d`).
 - The mode is provided by a small custom build of floor3d-card v2.13.2,
   loaded as **`custom:floor3d-card-sims`**. The HACS card remains
   installed; the custom resource is separate and shares its editor.
+- The card has an in-model **AUTO / DAY / NIGHT** button (bottom-left).
+  AUTO follows the real sun; DAY and NIGHT force a fixed sun/sky/torch
+  look. The five real lamps are not touched. The choice is internal to
+  the card and resets to AUTO on reload (no helper).
 - Absolute scale is still a placeholder: the plan has no printed
   dimensions, so `SCALE = 70 px/m` is kept. Overall footprint is
   **14.6 × 10.6 m**. The OBJ is exported in **centimetres** because
@@ -35,7 +39,7 @@ Home Assistant dashboard **Home 3D** (`home-3d`).
 |---|---|
 | Model commit | `0b3b367` |
 | Model base URL | `https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/0b3b367/` |
-| Custom card resource | `https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@0209251/custom-card/floor3d-card.js` |
+| Custom card resource | `https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@9ce4c39/custom-card/floor3d-card.js` |
 | Dashboard card type | `custom:floor3d-card-sims` |
 | Wall mode | `sims` |
 
@@ -193,6 +197,22 @@ card will show the lamp off until the entity is available.
   Master bath.
 - No ceilings, so the model reads as a dollhouse from above.
 
+### Lighting button (AUTO / DAY / NIGHT)
+
+A small pill at the bottom-left of the model cycles:
+
+1. **AUTO** — follows `sun.sun`: real daylight, sky, stars/moon, and the
+   `globalLightPower: sensor.floor3d_ambient_power` torch.
+2. **DAY** — forces a fixed sun (azimuth 180°, elevation 45°), blue sky,
+   torch `day_globalLightPower: 0.25`, exposure `day_exposure: 1.15`.
+3. **NIGHT** — forces the sun below the horizon, stars/moon, torch
+   `night_globalLightPower: 0.75`, exposure `night_exposure: 1.0`.
+
+The button cycles back to AUTO. It changes **appearance only**: the five
+lamps keep their current states. The mode is held in the card, not in a
+helper, so a reload starts at AUTO; there is nothing to automate or sync
+between devices.
+
 ## Local development (LAN only)
 
 For faster iteration when the browser and this machine are on the same
@@ -261,6 +281,9 @@ Then regenerate and publish (see above). The generator writes
 - The custom `sims` card is a fork of floor3d-card v2.13.2; HACS updates
   to the base card do not automatically update it. The source patch is in
   `custom-card/`.
+- The AUTO/DAY/NIGHT choice is internal and resets to AUTO on reload; it
+  is per card/browser, not shared. If you later want persistence or
+  automations, a helper can be added.
 - The wall split doubles the wall objects (low + high) and therefore the
   OBJ size; the effect is still cheap at runtime because it only toggles
   `visible`.

@@ -16,7 +16,7 @@ The dashboard loads the model **from the public GitHub repo** through
   reliably bypass it (tested); a commit-SHA URL is immutable and served
   immediately. Update the path to the new SHA after each model push.
 - The custom card JS is a second module resource, served by jsDelivr:
-  `https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@0209251/custom-card/floor3d-card.js`.
+  `https://cdn.jsdelivr.net/gh/c0pper/homeassistant-3d-card@9ce4c39/custom-card/floor3d-card.js`.
   It registers `floor3d-card-sims`; the HACS `floor3d-card` resource
   stays installed and shares its editor. Raw GitHub serves `.js` as
   `text/plain`, which browsers reject for modules, hence jsDelivr.
@@ -44,7 +44,7 @@ git rev-parse --short HEAD
 # path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/<sha>/
 ```
 
-The current model commit is `0b3b367`; the custom card commit is `0209251`. `objfile` and `mtlfile` stay
+The current model commit is `0b3b367`; the custom card commit is `9ce4c39`. `objfile` and `mtlfile` stay
 plain names.
 
 If `custom-card/` changes, rebuild it with the instructions in
@@ -91,6 +91,22 @@ The custom build lives in `custom-card/` (patched v2.13.2, MIT); the
 source patch is `custom-card/floor3d-card-sims.patch`. It registers a
 separate element, `floor3d-card-sims`, so it can be loaded beside the
 HACS card without a duplicate definition.
+
+### Lighting button
+
+The custom card renders a small **AUTO / DAY / NIGHT** pill at the
+bottom-left. It cycles AUTO -> DAY -> NIGHT -> AUTO:
+
+- **AUTO** follows `sun.sun` and the `globalLightPower` sensor.
+- **DAY** forces sun azimuth 180° / elevation 45°, blue sky, torch
+  `day_globalLightPower` (0.25) and `day_exposure` (1.15).
+- **NIGHT** forces the sun below the horizon, stars/moon, torch
+  `night_globalLightPower` (0.75) and `night_exposure` (1.0).
+
+It changes appearance only; the five lamps are not touched. The mode is
+held in the card (`_lightingMode`), not in an HA helper, and resets to
+AUTO on reload. The HACS card has no such button; this is only in the
+custom sims build.
 
 ## Generating the model
 
