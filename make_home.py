@@ -25,6 +25,8 @@ BALCONY_HEAD = 2.85     # balcony doors go almost to ceiling
 BALCONY_SILL = 0.05
 WIN_SILL = 0.90
 WIN_HEAD = 2.20
+SIMS_H = 0.20           # low stub for near walls in walls: sims
+SIMS_GAP = 0.0005       # avoids coplanar faces between low and high parts
 
 # plan origin (top-left outer corner is at 95,246; top-right at 1118,132)
 OX, OY = 95.0, 132.0
@@ -372,11 +374,22 @@ def add_wall(obj, name, p1, p2, t, openings):
         if b - a < 1e-4 or y1 - y0 < 1e-4:
             return
         _wall_no += 1
+        n = _wall_no
         ax, az = p1[0] + ux * a, p1[1] + uz * a
         bx, bz = p1[0] + ux * b, p1[1] + uz * b
         poly = [(ax + vx, az + vz), (bx + vx, bz + vz),
                 (bx - vx, bz - vz), (ax - vx, az - vz)]
-        obj.poly_prism(f"wall_{_wall_no:03d}", "wall", poly, y0, y1)
+        # Split every wall solid at the Sims stub height. Near walls show
+        # the low part only; far walls show both. The low part is closed,
+        # so the stub has a solid 20 cm top.
+        if y1 <= SIMS_H:
+            obj.poly_prism(f"wall_sims_low_{n:03d}", "wall", poly, y0, y1)
+        elif y0 >= SIMS_H:
+            obj.poly_prism(f"wall_sims_high_{n:03d}", "wall", poly, y0, y1)
+        else:
+            obj.poly_prism(f"wall_sims_low_{n:03d}", "wall", poly, y0, SIMS_H)
+            obj.poly_prism(f"wall_sims_high_{n:03d}", "wall", poly,
+                           SIMS_H + SIMS_GAP, y1)
 
     cur = 0.0
     for a, b, kind in sorted(openings):
@@ -394,9 +407,13 @@ def add_wall(obj, name, p1, p2, t, openings):
             gz = ux * 0.02
             ax, az = p1[0] + ux * a, p1[1] + uz * a
             bx, bz = p1[0] + ux * b, p1[1] + uz * b
-            obj.poly_prism(f"wall_glass_balcony_{_wall_no:03d}", "glass",
-                           [(ax + gx, az + gz), (bx + gx, bz + gz),
-                            (bx - gx, bz - gz), (ax - gx, az - gz)], BALCONY_SILL, BALCONY_HEAD)
+            n = _wall_no
+            gp = [(ax + gx, az + gz), (bx + gx, bz + gz),
+                  (bx - gx, bz - gz), (ax - gx, az - gz)]
+            if BALCONY_SILL < SIMS_H:
+                obj.poly_prism(f"wall_sims_glass_low_{n:03d}", "glass", gp, BALCONY_SILL, SIMS_H)
+            obj.poly_prism(f"wall_sims_glass_high_{n:03d}", "glass", gp,
+                           max(BALCONY_SILL, SIMS_H + SIMS_GAP), BALCONY_HEAD)
         else:
             solid(a, b, 0.0, WIN_SILL)
             solid(a, b, WIN_HEAD, H)
@@ -406,9 +423,13 @@ def add_wall(obj, name, p1, p2, t, openings):
             gz = ux * 0.02
             ax, az = p1[0] + ux * a, p1[1] + uz * a
             bx, bz = p1[0] + ux * b, p1[1] + uz * b
-            obj.poly_prism(f"wall_glass_{_wall_no:03d}", "glass",
-                           [(ax + gx, az + gz), (bx + gx, bz + gz),
-                            (bx - gx, bz - gz), (ax - gx, az - gz)], WIN_SILL, WIN_HEAD)
+            n = _wall_no
+            gp = [(ax + gx, az + gz), (bx + gx, bz + gz),
+                  (bx - gx, bz - gz), (ax - gx, az - gz)]
+            if WIN_SILL < SIMS_H:
+                obj.poly_prism(f"wall_sims_glass_low_{n:03d}", "glass", gp, WIN_SILL, SIMS_H)
+            obj.poly_prism(f"wall_sims_glass_high_{n:03d}", "glass", gp,
+                           max(WIN_SILL, SIMS_H + SIMS_GAP), WIN_HEAD)
         cur = b
     if cur < length:
         solid(cur, length, 0.0, H)
@@ -437,7 +458,9 @@ def build():
                       cz + (r + INT_T / 2) * math.sin(a)))
         inner.append((cx + (r - INT_T / 2) * math.cos(a),
                       cz + (r - INT_T / 2) * math.sin(a)))
-    obj.poly_prism("wall_rip_curve", "wall", outer + list(reversed(inner)), 0.0, H)
+    rip_poly = outer + list(reversed(inner))
+    obj.poly_prism("wall_sims_low_rip_curve", "wall", rip_poly, 0.0, SIMS_H)
+    obj.poly_prism("wall_sims_high_rip_curve", "wall", rip_poly, SIMS_H + SIMS_GAP, H)
 
     # balconies: slab, glass parapet on three sides, dark handrail
     w1, w2 = P(96.1, 255.7), P(1119.1, 141.7)
@@ -668,7 +691,7 @@ def card_yaml():
 # Local dev on the LAN: set path: http://192.168.1.4:8765/
 # Permanent HA-local setup: copy home.obj + home.mtl to /config/www/floor3d/
 # and set path: /local/floor3d/.
-type: custom:floor3d-card
+type: custom:floor3d-card-sims
 name: Home 3D
 path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/15dd34b/
 objfile: home.obj
@@ -690,8 +713,9 @@ north:
   x: 0
   z: -1
 click: 'yes'
-walls: low
-walls_height: 100
+# sims: near walls show the closed 20 cm stub, far walls stay full.
+# The split at 20 cm is baked into home.obj (wall_sims_low_*/wall_sims_high_*).
+walls: sims
 camera_position:
   x: 0
   y: 1500
@@ -796,8 +820,12 @@ def main():
                     "px": px, "py": py, "height_m": h, "room": LIGHT_ROOMS.get(name)}
                    for name, px, py, h, _ in LIGHTS],
         "walls": len(WALLS),
+        "walls_mode": "sims",
+        "sims_low_cm": round(SIMS_H * 100, 1),
+        "wall_split": ["wall_sims_low_*", "wall_sims_high_*"],
         "note": ("Pixel coordinates from floorplan.jpg. Absolute scale is a placeholder; "
-                 "OBJ vertices are centimetres. HA area mapping and room names marked "
+                 "OBJ vertices are centimetres. Walls are split at the Sims stub height "
+                 "(wall_sims_low_*/wall_sims_high_*); HA area mapping and room names marked "
                  "'assuming' are provisional."),
         "obj_units": "cm",
     }

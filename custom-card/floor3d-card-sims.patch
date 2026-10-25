@@ -1,0 +1,200 @@
+diff --git a/src/const.ts b/src/const.ts
+index d3e79bc..0097f6e 100644
+--- a/src/const.ts
++++ b/src/const.ts
+@@ -1,7 +1,7 @@
+ // Version of this build, shown at the top of the card editor and in the browser console.
+ // Keep it equal to "version" in package.json and to the tag of the GitHub release (HACS shows the
+ // tag): 2.0.0 -> v2.0.0. Test builds between releases get a suffix (v2.0.1-dev.1).
+-export const CARD_VERSION = 'v2.13.2';
++export const CARD_VERSION = 'v2.13.2-sims.1';
+ 
+ // Events between the card editor and the card shown next to it (the preview): see editor.ts.
+ export const EDITOR_EVENT = 'floor3d-card-editor';
+diff --git a/src/floor3d-card.ts b/src/floor3d-card.ts
+index 39bf4f5..8571d0b 100644
+--- a/src/floor3d-card.ts
++++ b/src/floor3d-card.ts
+@@ -3358,21 +3358,17 @@ export class Floor3dCard extends LitElement {
+   }
+ }
+ 
+-// The original card (adizanni/floor3d-card) defines the same elements: when both are loaded, the first
+-// one stays and the other one leaves it alone instead of failing. The card picker of Home Assistant
+-// lists this card under its name in HACS, and only when it is the one defined: until 2.12.1 it also
+-// listed it when the original was, with the same name as the original.
+-if (!customElements.get('floor3d-card')) {
+-  customElements.define('floor3d-card', Floor3dCard);
++// This build is loaded beside the HACS card, so it registers a separate element. The tag must stay
++// distinct: defining floor3d-card again would be ignored (or clash with the HACS card).
++if (!customElements.get('floor3d-card-sims')) {
++  customElements.define('floor3d-card-sims', Floor3dCard);
+   (window as any).customCards = (window as any).customCards || [];
+   (window as any).customCards.push({
+-    type: 'floor3d-card',
+-    name: 'floor3d-card mod',
++    type: 'floor3d-card-sims',
++    name: 'floor3d-card sims',
+     preview: true,
+-    description: 'A custom card to visualize and activate entities in a live 3D model',
++    description: 'floor3d-card with walls: sims (near walls low, far walls full)',
+   });
+ } else {
+-  console.warn(
+-    'floor3d-card mod: custom:floor3d-card is already defined by another resource, probably the original card',
+-  );
++  console.warn('floor3d-card sims: custom:floor3d-card-sims is already defined');
+ }
+diff --git a/src/walls.ts b/src/walls.ts
+index 7f4e9ce..78e206c 100644
+--- a/src/walls.ts
++++ b/src/walls.ts
+@@ -7,18 +7,26 @@ import * as THREE from 'three';
+ import type { Floor3dCardConfig } from './types';
+ 
+ const FADE_TIME = 0.4; // seconds from solid to faded, and back
+-const FACING = 0.3; // a wall fades when its face turns to the camera more than this (a cosine)
++const FACING = 0.3; // a wall fades or drops when its face turns to the camera more than this (a cosine)
+ 
+ interface WallView {
+   mesh: THREE.Mesh;
+   materials: THREE.Material[]; // its own copies
+   base: { opacity: number; transparent: boolean; depthWrite: boolean }[]; // as they were
+-  normal?: THREE.Vector3; // horizontal, away from the middle of the walls (fade)
++  normal?: THREE.Vector3; // horizontal, away from the middle of the walls (fade/sims)
+   level: number;
+   opacity: number; // now, 0..1
+   goal: number;
+ }
+ 
++// A wall split at the Sims stub height: low is the closed 20 cm piece, high the rest.
++interface SimsView {
++  high: THREE.Mesh;
++  low?: THREE.Mesh;
++  normal?: THREE.Vector3; // horizontal, away from the middle of the walls
++  middle: THREE.Vector2;
++}
++
+ export interface WallsHost {
+   readonly config: Floor3dCardConfig;
+   readonly scene: THREE.Scene;
+@@ -74,12 +82,13 @@ function facing(mesh: THREE.Mesh): { normal: THREE.Vector3; middle: THREE.Vector
+ 
+ export class Walls {
+   private _walls: WallView[] = [];
++  private _sims: SimsView[] = [];
+   private _mode = 'none';
+   private _planes: { plane: THREE.Plane; bottom: number }[] = []; // low: the cut of each level, its floor in the model
+ 
+   constructor(private host: WallsHost) {}
+ 
+-  // The mode of the walls: none (the default), fade or low.
++  // The mode of the walls: none (the default), fade, low or sims.
+   public get mode(): string {
+     return this._mode;
+   }
+@@ -91,12 +100,13 @@ export class Walls {
+ 
+   // The model is set up (and centred): its walls get materials of their own, as a GLB often shares
+   // one material among the walls and other objects. With low they are cut; with fade the walls in
+-  // the way of the view start faded.
++  // the way of the view start faded; with sims the high parts of near walls are hidden.
+   public init(): void {
+     this._walls = [];
++    this._sims = [];
+     this._planes = [];
+     const mode = String(this.host.config.walls || 'none');
+-    this._mode = mode == 'fade' || mode == 'low' ? mode : 'none';
++    this._mode = mode == 'fade' || mode == 'low' || mode == 'sims' ? mode : 'none';
+     if (this._mode == 'none') return;
+     const meshes: THREE.Mesh[] = [];
+     this.host.objectNamesFor([String(this.host.config.walls_objects || 'wall_*')]).forEach((name) => {
+@@ -113,6 +123,10 @@ export class Walls {
+       );
+       return;
+     }
++    if (this._mode == 'sims') {
++      this._initSims(meshes);
++      return;
++    }
+     this._walls = meshes.map((mesh) => {
+       const own = (Array.isArray(mesh.material) ? mesh.material : [mesh.material]).map((m) => m.clone());
+       mesh.material = Array.isArray(mesh.material) ? own : own[0];
+@@ -129,6 +143,41 @@ export class Walls {
+     else this._face();
+   }
+ 
++  // sims: every wall is split in the model at the stub height (wall_sims_low_* and
++  // wall_sims_high_*). The high part of a wall whose outer side faces the camera is hidden; the
++  // closed low part stays, so near walls are a solid stub and far walls stay full.
++  private _initSims(meshes: THREE.Mesh[]): void {
++    const byName = new Map<string, THREE.Mesh>();
++    meshes.forEach((mesh) => {
++      if (mesh.name) byName.set(mesh.name, mesh);
++    });
++    const found: { high: THREE.Mesh; low?: THREE.Mesh; face: { normal: THREE.Vector3; middle: THREE.Vector2 } }[] =
++      [];
++    byName.forEach((high, name) => {
++      if (!name.includes('_high_')) return;
++      const low = byName.get(name.replace('_high_', '_low_'));
++      const face = facing(high) || (low ? facing(low) : undefined);
++      if (!face) return;
++      high.visible = true;
++      if (low) low.visible = true;
++      found.push({ high, low, face });
++    });
++    if (!found.length) {
++      console.warn('floor3d-card: walls: sims found no wall_sims_high_* objects');
++      return;
++    }
++    const middle = found
++      .map((f) => f.face.middle)
++      .reduce((sum, m) => sum.add(m), new THREE.Vector2())
++      .divideScalar(found.length);
++    this._sims = found.map(({ high, low, face }) => {
++      const away = face.middle.clone().sub(middle);
++      if (face.normal.x * away.x + face.normal.z * away.y < 0) face.normal.negate();
++      return { high, low, normal: face.normal, middle: face.middle };
++    });
++    this.update();
++  }
++
+   // low: each level cut at walls_height (100 cm by default) above its floor, the floor of its walls.
+   // The inside of a cut wall shows, so that it looks solid from above; its shadow stays whole.
+   private _cut(): void {
+@@ -185,6 +234,10 @@ export class Walls {
+   // The camera moved: the walls whose face turns to it fade, the others come back. Seen straight from
+   // above no wall is in the way.
+   public update(): void {
++    if (this._mode == 'sims') {
++      this._updateSims();
++      return;
++    }
+     if (this._mode != 'fade' || !this._walls.length) return;
+     const side = this.host.camera.position.clone().sub(this.host.target).setY(0);
+     const level = side.lengthSq() > 1e-6;
+@@ -201,6 +254,24 @@ export class Walls {
+     if (changed) this.host.animate();
+   }
+ 
++  // sims: hide the high part when the wall faces the camera; show it again otherwise. Seen straight
++  // from above there is no side, so every wall stays full.
++  private _updateSims(): void {
++    const side = this.host.camera.position.clone().sub(this.host.target).setY(0);
++    const level = side.lengthSq() > 1e-6;
++    if (level) side.normalize();
++    let changed = false;
++    this._sims.forEach((w) => {
++      const near = level && w.normal && w.normal.dot(side) > FACING;
++      const visible = !near;
++      if (w.high.visible !== visible) {
++        w.high.visible = visible;
++        changed = true;
++      }
++    });
++    if (changed) this.host.scheduleRender();
++  }
++
+   // A frame of the animation, dt seconds after the previous one: the walls go toward their opacity.
+   public step(dt: number): void {
+     const delta = dt / FADE_TIME;

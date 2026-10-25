@@ -135,6 +135,12 @@
     }
   ],
   "walls": 23,
-  "note": "Pixel coordinates from floorplan.jpg. Absolute scale is a placeholder; OBJ vertices are centimetres. HA area mapping and room names marked 'assuming' are provisional.",
+  "walls_mode": "sims",
+  "sims_low_cm": 20.0,
+  "wall_split": [
+    "wall_sims_low_*",
+    "wall_sims_high_*"
+  ],
+  "note": "Pixel coordinates from floorplan.jpg. Absolute scale is a placeholder; OBJ vertices are centimetres. Walls are split at the Sims stub height (wall_sims_low_*/wall_sims_high_*); HA area mapping and room names marked 'assuming' are provisional.",
   "obj_units": "cm"
 }

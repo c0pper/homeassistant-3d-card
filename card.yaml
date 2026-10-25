@@ -5,7 +5,7 @@
 # Local dev on the LAN: set path: http://192.168.1.4:8765/
 # Permanent HA-local setup: copy home.obj + home.mtl to /config/www/floor3d/
 # and set path: /local/floor3d/.
-type: custom:floor3d-card
+type: custom:floor3d-card-sims
 name: Home 3D
 path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/15dd34b/
 objfile: home.obj
@@ -27,8 +27,9 @@ north:
   x: 0
   z: -1
 click: 'yes'
-walls: low
-walls_height: 100
+# sims: near walls show the closed 20 cm stub, far walls stay full.
+# The split at 20 cm is baked into home.obj (wall_sims_low_*/wall_sims_high_*).
+walls: sims
 camera_position:
   x: 0
   y: 1500
