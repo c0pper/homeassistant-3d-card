@@ -30,14 +30,10 @@
 <rect x="693" y="392" width="120" height="55" fill="none" stroke="#cbd5e1" stroke-width="0.9" stroke-dasharray="3 3" opacity="0.55"/>
 <rect x="813" y="366" width="46" height="82" fill="none" stroke="#cbd5e1" stroke-width="0.9" stroke-dasharray="3 3" opacity="0.55"/>
 <line x1="86.1" y1="210.7" x2="1109.1" y2="96.7" stroke="#e5edf7" stroke-width="19.6" stroke-linecap="butt"/>
-<line x1="136.1" y1="205.1" x2="186.1" y2="199.6" stroke="#45c4e8" stroke-width="5"/>
-<line x1="201.1" y1="197.9" x2="246.1" y2="192.9" stroke="#45c4e8" stroke-width="5"/>
-<line x1="341.1" y1="182.3" x2="421.1" y2="173.4" stroke="#e879d6" stroke-width="5"/>
-<line x1="451.1" y1="170.0" x2="506.1" y2="163.9" stroke="#e879d6" stroke-width="5"/>
-<line x1="591.1" y1="154.4" x2="651.1" y2="147.7" stroke="#e879d6" stroke-width="5"/>
-<line x1="691.1" y1="143.3" x2="751.1" y2="136.6" stroke="#e879d6" stroke-width="5"/>
-<line x1="891.1" y1="121.0" x2="961.1" y2="113.2" stroke="#45c4e8" stroke-width="5"/>
-<line x1="981.1" y1="111.0" x2="1041.1" y2="104.3" stroke="#45c4e8" stroke-width="5"/>
+<line x1="136.1" y1="205.1" x2="246.1" y2="192.9" stroke="#45c4e8" stroke-width="5"/>
+<line x1="341.1" y1="182.3" x2="506.1" y2="163.9" stroke="#e879d6" stroke-width="5"/>
+<line x1="591.1" y1="154.4" x2="751.1" y2="136.6" stroke="#e879d6" stroke-width="5"/>
+<line x1="891.1" y1="121.0" x2="1041.1" y2="104.3" stroke="#45c4e8" stroke-width="5"/>
 <line x1="1098.2" y1="87.0" x2="1098.2" y2="525.0" stroke="#e5edf7" stroke-width="19.6" stroke-linecap="butt"/>
 <line x1="1108.0" y1="515.2" x2="696.0" y2="515.2" stroke="#e5edf7" stroke-width="19.6" stroke-linecap="butt"/>
 <line x1="960.0" y1="515.2" x2="890.0" y2="515.2" stroke="#45c4e8" stroke-width="5"/>

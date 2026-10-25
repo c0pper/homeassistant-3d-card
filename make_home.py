@@ -27,6 +27,7 @@ WIN_SILL = 0.90
 WIN_HEAD = 2.20
 SIMS_H = 0.20           # low stub for near walls in walls: sims
 SIMS_GAP = 0.0005       # avoids coplanar faces between low and high parts
+PAIR_MULLION = 0.06     # thin frame between the two equal leaves of a pair
 
 # plan origin (top-left outer corner is at 95,246; top-right at 1118,132)
 OX, OY = 95.0, 132.0
@@ -85,14 +86,11 @@ def M(px):
 WALLS = [
     # exterior
     ("top", P(96.1, 255.7), P(1119.1, 141.7), EXT_T, [
-        (top_d(145), top_d(195), "window"),
-        (top_d(210), top_d(255), "window"),
-        (top_d(350), top_d(430), "balcony"),
-        (top_d(460), top_d(515), "balcony"),
-        (top_d(600), top_d(660), "balcony"),
-        (top_d(700), top_d(760), "balcony"),
-        (top_d(900), top_d(970), "window"),
-        (top_d(990), top_d(1050), "window"),
+        # one combined opening per pair: two equal leaves and a thin mullion
+        (top_d(145), top_d(255), "pair_window"),     # bedroom
+        (top_d(350), top_d(515), "pair_balcony"),    # kitchen balcony
+        (top_d(600), top_d(760), "pair_balcony"),    # living balcony
+        (top_d(900), top_d(1050), "pair_window"),    # studio
     ]),
     ("right", P(1108.2, 132), P(1108.2, 570), EXT_T, []),
     # south wall of living room and studio: one thickness with the rest,
@@ -391,12 +389,45 @@ def add_wall(obj, name, p1, p2, t, openings):
             obj.poly_prism(f"wall_sims_high_{name}_{n:03d}", "wall", poly,
                            SIMS_H + SIMS_GAP, y1)
 
+    def pane(a, b, y0, y1):
+        """A glass leaf, split at SIMS_H like the walls."""
+        global _wall_no
+        _wall_no += 1
+        n = _wall_no
+        ax, az = p1[0] + ux * a, p1[1] + uz * a
+        bx, bz = p1[0] + ux * b, p1[1] + uz * b
+        gx = -uz * 0.02
+        gz = ux * 0.02
+        gp = [(ax + gx, az + gz), (bx + gx, bz + gz),
+              (bx - gx, bz - gz), (ax - gx, az - gz)]
+        if y0 < SIMS_H:
+            obj.poly_prism(f"wall_sims_glass_low_{name}_{n:03d}", "glass", gp, y0, SIMS_H)
+        obj.poly_prism(f"wall_sims_glass_high_{name}_{n:03d}", "glass", gp,
+                       max(y0, SIMS_H + SIMS_GAP), y1)
+
     cur = 0.0
     for a, b, kind in sorted(openings):
         a, b = max(0.0, a), min(length, b)
         if a > cur:
             solid(cur, a, 0.0, H)
-        if kind == "door":
+        if kind in ("pair_window", "pair_balcony"):
+            # One combined opening: two equal leaves, thin mullion between, no wall pier.
+            balcony = kind == "pair_balcony"
+            sill = BALCONY_SILL if balcony else WIN_SILL
+            head = BALCONY_HEAD if balcony else WIN_HEAD
+            if balcony:
+                solid(a, b, head, H)
+            else:
+                solid(a, b, 0.0, sill)
+                solid(a, b, head, H)
+            mid = (a + b) / 2
+            m = PAIR_MULLION / 2
+            if mid - m > a:
+                pane(a, mid - m, sill, head)
+            if mid + m < b:
+                pane(mid + m, b, sill, head)
+            solid(max(a, mid - m), min(b, mid + m), sill, head)
+        elif kind == "door":
             solid(a, b, DOOR_H, H)
         elif kind == "balcony":
             # full-height glass door; small wall transom above near ceiling
@@ -592,7 +623,7 @@ def preview():
             ux, uz = dx / L, dz / L
             ax, az = p1[0] + ux * a, p1[1] + uz * a
             bx, bz = p1[0] + ux * b, p1[1] + uz * b
-            color = "#45c4e8" if kind == "window" else ("#e879d6" if kind == "balcony" else "#f2b84b")
+            color = "#45c4e8" if kind in ("window", "pair_window") else ("#e879d6" if kind in ("balcony", "pair_balcony") else "#f2b84b")
             parts.append(f'<line x1="{wx(ax):.1f}" y1="{wy(az):.1f}" x2="{wx(bx):.1f}" y2="{wy(bz):.1f}" '
                          f'stroke="{color}" stroke-width="5"/>')
 
@@ -830,6 +861,7 @@ def main():
         "walls": len(WALLS),
         "walls_mode": "sims",
         "sims_low_cm": round(SIMS_H * 100, 1),
+        "pair_mullion_cm": round(PAIR_MULLION * 100, 1),
         "wall_split": ["wall_sims_low_*", "wall_sims_high_*"],
         "note": ("Pixel coordinates from floorplan.jpg. Absolute scale is a placeholder; "
                  "OBJ vertices are centimetres. Walls are split at the Sims stub height "

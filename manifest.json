@@ -137,6 +137,7 @@
   "walls": 23,
   "walls_mode": "sims",
   "sims_low_cm": 20.0,
+  "pair_mullion_cm": 6.0,
   "wall_split": [
     "wall_sims_low_*",
     "wall_sims_high_*"
