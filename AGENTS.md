@@ -44,7 +44,7 @@ git rev-parse --short HEAD
 # path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/<sha>/
 ```
 
-The current model commit is `5b7ecaa`; the custom card commit is `e822865`. `objfile` and `mtlfile` stay
+The current model commit is `d3d244c`; the custom card commit is `e822865`. `objfile` and `mtlfile` stay
 plain names.
 
 If `custom-card/` changes, rebuild it with the instructions in
