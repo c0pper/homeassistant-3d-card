@@ -51,20 +51,20 @@ BASE = [(95, 246), (1118, 132), (1118, 570), (706, 570), (706, 598), (385, 598),
 
 ROOMS = [
     # id, label, polygon (px), floor material
-    ("room_left", "Bedroom", [(115, 258), (324, 235), (324, 468), (115, 468)], "wood"),
+    ("room_left", "Bedroom", [(115, 258), (324, 235), (324, 468), (115, 468)], "tile"),
     ("room_kitchen", "Kitchen", [(267, 468), (324, 468), (324, 235), (600, 204), (600, 468),
                                  (574, 468), (571, 461), (566, 455), (560, 450), (553, 447),
                                  (545, 446), (474, 446), (474, 497), (267, 497)], "tile"),
-    ("room_living", "Living room (assumed)", [(600, 204), (870, 174), (870, 550), (688, 550), (688, 468), (600, 468)], "wood"),
+    ("room_living", "Living room (assumed)", [(600, 204), (870, 174), (870, 550), (688, 550), (688, 468), (600, 468)], "tile"),
     ("room_corridor", "Corridor", [(267, 497), (474, 497), (474, 518), (575, 518), (575, 468),
-                                   (688, 468), (688, 588), (267, 588)], "stone"),
-    ("room_right", "Studio", [(870, 174), (1098, 149), (1098, 550), (870, 550)], "wood"),
+                                   (688, 468), (688, 588), (267, 588)], "tile"),
+    ("room_right", "Studio", [(870, 174), (1098, 149), (1098, 550), (870, 550)], "tile"),
     ("room_ca", "C.A. (wardrobe)", [(115, 468), (267, 468), (267, 597), (115, 597)], "tile"),
     ("room_wc1", "WC 1", [(115, 597), (267, 597), (267, 819), (115, 819)], "tile"),
     ("room_wc2", "WC 2", [(267, 597), (375, 597), (375, 819), (267, 819)], "tile"),
     # storage room: rounded north-east corner, door in the south wall
     ("room_rip", "RIP (storage)", [(474, 446), (545, 446), (553, 447), (560, 450), (566, 455),
-                                   (571, 461), (574, 468), (575, 476), (575, 518), (474, 518)], "stone"),
+                                   (571, 461), (574, 468), (575, 476), (575, 518), (474, 518)], "tile"),
 ]
 
 # ---------------------------------------------------------------- walls
@@ -103,36 +103,36 @@ WALLS = [
     ("left", P(105, 829), P(105, 246), EXT_T, []),
     # interior
     # wardrobe room: door moved to the north wall (from the bedroom)
-    ("left_south", P(95, 468), P(324, 468), INT_T, [
+    ("cut_left_south", P(95, 468), P(324, 468), INT_T, [
         (0.55, 1.45, "door"),
         (M(175), M(225), "door"),
     ]),
-    ("left_east", P(324, 240), P(324, 468), INT_T, []),
-    ("ca_east", P(267, 468), P(267, 597), INT_T, []),
-    ("wc_north", P(115, 597), P(375, 597), INT_T, [(M(35), M(85), "door"), (M(165), M(215), "door")]),
-    ("wc_div", P(267, 597), P(267, 819), INT_T, []),
-    ("wc_east", P(375, 597), P(375, 829), EXT_T, []),
+    ("cut_left_east", P(324, 240), P(324, 468), INT_T, []),
+    ("cut_ca_east", P(267, 468), P(267, 597), INT_T, []),
+    ("cut_wc_north", P(115, 597), P(375, 597), INT_T, [(M(35), M(85), "door"), (M(165), M(215), "door")]),
+    ("cut_wc_div", P(267, 597), P(267, 819), INT_T, []),
+    ("cut_wc_east", P(375, 597), P(375, 829), EXT_T, []),
     # south wall of the two bathrooms, now the apartment boundary: the two
     # windows that used to sit on the removed stairwell wall live here
-    ("wc_south", P(115, 819), P(375, 819), EXT_T, [
+    ("cut_wc_south", P(115, 819), P(375, 819), EXT_T, [
         (0.586, 1.586, "window"),
         (2.443, 3.443, "window"),
     ]),
     # main entrance door to the apartment (x 600-680 in the plan)
-    ("corridor_south", P(267, 588), P(697, 588), EXT_T, [(M(333), M(413), "door")]),
+    ("cut_corridor_south", P(267, 588), P(697, 588), EXT_T, [(M(333), M(413), "door")]),
     # partition between kitchen and corridor, left of the storage room
-    ("corridor_north", P(324, 497), P(474, 497), INT_T, []),
+    ("cut_corridor_north", P(324, 497), P(474, 497), INT_T, []),
     # storage room: straight walls; the rounded corner is built in build()
-    ("rip_west", P(474, 446), P(474, 518), INT_T, []),
-    ("rip_north", P(474, 446), P(545, 446), INT_T, []),
-    ("rip_east", P(575, 476), P(575, 518), INT_T, []),
-    ("rip_south", P(474, 518), P(575, 518), INT_T, [(0.657, 1.314, "door")]),
+    ("cut_rip_west", P(474, 446), P(474, 518), INT_T, []),
+    ("cut_rip_north", P(474, 446), P(545, 446), INT_T, []),
+    ("cut_rip_east", P(575, 476), P(575, 518), INT_T, []),
+    ("cut_rip_south", P(474, 518), P(575, 518), INT_T, [(0.657, 1.314, "door")]),
     # living-room partition: stepped wall with the kitchen counter against it
-    ("living_part_west", P(701, 403), P(701, 430), INT_T, []),
-    ("living_part_south", P(701, 430), P(816, 430), INT_T, []),
-    ("living_part_riser", P(816, 403), P(816, 430), INT_T, []),
-    ("living_part_north", P(816, 403), P(868, 403), INT_T, []),
-    ("right_west", P(870, 178), P(870, 550), INT_T, [(M(267), M(327), "door")]),
+    ("cut_living_part_west", P(701, 403), P(701, 430), INT_T, []),
+    ("cut_living_part_south", P(701, 430), P(816, 430), INT_T, []),
+    ("cut_living_part_riser", P(816, 403), P(816, 430), INT_T, []),
+    ("cut_living_part_north", P(816, 403), P(868, 403), INT_T, []),
+    ("cut_right_west", P(870, 178), P(870, 550), INT_T, [(M(267), M(327), "door")]),
 ]
 
 # ---------------------------------------------------------------- lights
@@ -185,8 +185,8 @@ BALCONIES = [
 ]
 
 MATERIALS = {
-    "wood":    (0.62, 0.45, 0.30),
-    "tile":    (0.80, 0.82, 0.84),
+    "wood":    (0.50, 0.34, 0.18),
+    "tile":    (0.96, 0.95, 0.92),
     "stone":   (0.55, 0.55, 0.52),
     "wall":    (0.93, 0.93, 0.90),
     "fabric":  (0.35, 0.42, 0.55),
@@ -490,8 +490,8 @@ def build():
         inner.append((cx + (r - INT_T / 2) * math.cos(a),
                       cz + (r - INT_T / 2) * math.sin(a)))
     rip_poly = outer + list(reversed(inner))
-    obj.poly_prism("wall_sims_low_rip_curve_001", "wall", rip_poly, 0.0, SIMS_H)
-    obj.poly_prism("wall_sims_high_rip_curve_001", "wall", rip_poly, SIMS_H + SIMS_GAP, H)
+    obj.poly_prism("wall_sims_low_cut_rip_curve_001", "wall", rip_poly, 0.0, SIMS_H)
+    obj.poly_prism("wall_sims_high_cut_rip_curve_001", "wall", rip_poly, SIMS_H + SIMS_GAP, H)
 
     # balconies: slab, glass parapet on three sides, dark handrail
     w1, w2 = P(96.1, 255.7), P(1119.1, 141.7)
@@ -728,9 +728,9 @@ path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/5b7ecaa/
 objfile: home.obj
 mtlfile: home.mtl
 header: 'no'
-backgroundColor: sky
-exposure: 1.15
-tone_mapping: neutral
+backgroundColor: '#0b1026'
+exposure: 1.05
+tone_mapping: agx
 light_power: 1
 # torch light: brighter at night (sensor.floor3d_ambient_power, 0.75 night / 0.25 day)
 globalLightPower: sensor.floor3d_ambient_power
@@ -749,16 +749,14 @@ north:
   x: 0
   z: -1
 click: 'yes'
-# sims: near walls show the closed 20 cm stub, far walls stay full.
-# The split at 20 cm is baked into home.obj (wall_sims_low_*/wall_sims_high_*).
-# A wall also drops when its horizontal distance to the camera is within
-# walls_near_distance x the camera-target distance (edge-on internal walls).
+# sims: interior/secondary walls show the closed 20 cm stub; near exterior
+# walls drop by facing, far exterior walls stay full. The 20 cm split is baked
+# into home.obj (wall_sims_low_*/wall_sims_high_*).
 walls: sims
-walls_near_distance: 1.35
 camera_position:
   x: 0
-  y: 1500
-  z: 850
+  y: 1200
+  z: 900
 camera_target:
   x: 0
   y: 150

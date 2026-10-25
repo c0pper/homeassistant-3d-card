@@ -6,7 +6,7 @@
       "object_id": "room_left",
       "label": "Bedroom",
       "area_m2": 9.45,
-      "material": "wood",
+      "material": "tile",
       "ha_area": "bedroom",
       "assuming_name": false,
       "assuming_area": false
@@ -26,7 +26,7 @@
       "object_id": "room_living",
       "label": "Living room (assumed)",
       "area_m2": 18.42,
-      "material": "wood",
+      "material": "tile",
       "ha_area": "living_room",
       "assuming_name": true,
       "assuming_area": false
@@ -36,7 +36,7 @@
       "object_id": "room_corridor",
       "label": "Corridor",
       "area_m2": 8.05,
-      "material": "stone",
+      "material": "tile",
       "ha_area": null,
       "assuming_name": false,
       "assuming_area": false
@@ -46,7 +46,7 @@
       "object_id": "room_right",
       "label": "Studio",
       "area_m2": 18.08,
-      "material": "wood",
+      "material": "tile",
       "ha_area": "studio",
       "assuming_name": false,
       "assuming_area": false
@@ -86,7 +86,7 @@
       "object_id": "room_rip",
       "label": "RIP (storage)",
       "area_m2": 1.44,
-      "material": "stone",
+      "material": "tile",
       "ha_area": null,
       "assuming_name": false,
       "assuming_area": false

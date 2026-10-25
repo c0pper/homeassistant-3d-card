@@ -4,15 +4,15 @@
 <text x="50" y="28" fill="#f8fafc" font-size="19" font-weight="700">3D floor-plan model — provisional layout</text>
 <text x="50" y="46" fill="#94a3b8" font-size="11">14.6 × 10.6 m · 70 px/m placeholder · OBJ vertices in cm · room numbers match the legend</text>
 <path d="M85 201 L1108 87 L1108 525 L696 525 L696 553 L375 553 L375 784 L85 784 Z" fill="#343a40" stroke="none"/>
-<path d="M105 213 L314 190 L314 423 L105 423 Z" fill="#6b4f37" stroke="#a98462" stroke-width="1.2"/>
+<path d="M105 213 L314 190 L314 423 L105 423 Z" fill="#3d4b56" stroke="#7f9aad" stroke-width="1.2"/>
 <path d="M257 423 L314 423 L314 190 L590 159 L590 423 L564 423 L561 416 L556 410 L550 405 L543 402 L535 401 L464 401 L464 452 L257 452 Z" fill="#3d4b56" stroke="#7f9aad" stroke-width="1.2"/>
-<path d="M590 159 L860 129 L860 505 L678 505 L678 423 L590 423 Z" fill="#6b4f37" stroke="#a98462" stroke-width="1.2"/>
-<path d="M257 452 L464 452 L464 473 L565 473 L565 423 L678 423 L678 543 L257 543 Z" fill="#4b4b47" stroke="#7f7f75" stroke-width="1.2"/>
-<path d="M860 129 L1088 104 L1088 505 L860 505 Z" fill="#6b4f37" stroke="#a98462" stroke-width="1.2"/>
+<path d="M590 159 L860 129 L860 505 L678 505 L678 423 L590 423 Z" fill="#3d4b56" stroke="#7f9aad" stroke-width="1.2"/>
+<path d="M257 452 L464 452 L464 473 L565 473 L565 423 L678 423 L678 543 L257 543 Z" fill="#3d4b56" stroke="#7f9aad" stroke-width="1.2"/>
+<path d="M860 129 L1088 104 L1088 505 L860 505 Z" fill="#3d4b56" stroke="#7f9aad" stroke-width="1.2"/>
 <path d="M105 423 L257 423 L257 552 L105 552 Z" fill="#3d4b56" stroke="#7f9aad" stroke-width="1.2"/>
 <path d="M105 552 L257 552 L257 774 L105 774 Z" fill="#3d4b56" stroke="#7f9aad" stroke-width="1.2"/>
 <path d="M257 552 L365 552 L365 774 L257 774 Z" fill="#3d4b56" stroke="#7f9aad" stroke-width="1.2"/>
-<path d="M464 401 L535 401 L543 402 L550 405 L556 410 L561 416 L564 423 L565 431 L565 473 L464 473 Z" fill="#4b4b47" stroke="#7f7f75" stroke-width="1.2"/>
+<path d="M464 401 L535 401 L543 402 L550 405 L556 410 L561 416 L564 423 L565 431 L565 473 L464 473 Z" fill="#3d4b56" stroke="#7f9aad" stroke-width="1.2"/>
 <rect x="380" y="285" width="170" height="60" fill="none" stroke="#cbd5e1" stroke-width="0.9" stroke-dasharray="3 3" opacity="0.55"/>
 <text x="465.0" y="318.0" fill="#cbd5e1" font-size="7" text-anchor="middle" opacity="0.85">island</text>
 <rect x="370" y="200" width="210" height="45" fill="none" stroke="#cbd5e1" stroke-width="0.9" stroke-dasharray="3 3" opacity="0.55"/>
@@ -114,19 +114,19 @@
 <text x="975" y="338" fill="#111827" font-size="8" font-weight="700" text-anchor="middle">L5</text>
 <rect x="1180" y="50" width="300" height="815" rx="12" fill="#111a2e" stroke="#24324a"/>
 <text x="1198" y="78" fill="#f8fafc" font-size="14" font-weight="700">Rooms</text>
-<rect x="1198" y="87" width="10" height="10" rx="2" fill="#6b4f37" stroke="#a98462" stroke-width="0.8"/>
+<rect x="1198" y="87" width="10" height="10" rx="2" fill="#3d4b56" stroke="#7f9aad" stroke-width="0.8"/>
 <text x="1216" y="96" fill="#e2e8f0" font-size="10">1&#160;&#160;Bedroom</text>
 <text x="1462" y="96" fill="#94a3b8" font-size="9" text-anchor="end">9.4 m²</text>
 <rect x="1198" y="105" width="10" height="10" rx="2" fill="#3d4b56" stroke="#7f9aad" stroke-width="0.8"/>
 <text x="1216" y="114" fill="#e2e8f0" font-size="10">2&#160;&#160;Kitchen</text>
 <text x="1462" y="114" fill="#94a3b8" font-size="9" text-anchor="end">14.8 m²</text>
-<rect x="1198" y="123" width="10" height="10" rx="2" fill="#6b4f37" stroke="#a98462" stroke-width="0.8"/>
+<rect x="1198" y="123" width="10" height="10" rx="2" fill="#3d4b56" stroke="#7f9aad" stroke-width="0.8"/>
 <text x="1216" y="132" fill="#e2e8f0" font-size="10">3&#160;&#160;Living room *</text>
 <text x="1462" y="132" fill="#94a3b8" font-size="9" text-anchor="end">18.4 m²</text>
-<rect x="1198" y="141" width="10" height="10" rx="2" fill="#4b4b47" stroke="#7f7f75" stroke-width="0.8"/>
+<rect x="1198" y="141" width="10" height="10" rx="2" fill="#3d4b56" stroke="#7f9aad" stroke-width="0.8"/>
 <text x="1216" y="150" fill="#e2e8f0" font-size="10">4&#160;&#160;Corridor</text>
 <text x="1462" y="150" fill="#94a3b8" font-size="9" text-anchor="end">8.1 m²</text>
-<rect x="1198" y="159" width="10" height="10" rx="2" fill="#6b4f37" stroke="#a98462" stroke-width="0.8"/>
+<rect x="1198" y="159" width="10" height="10" rx="2" fill="#3d4b56" stroke="#7f9aad" stroke-width="0.8"/>
 <text x="1216" y="168" fill="#e2e8f0" font-size="10">5&#160;&#160;Studio</text>
 <text x="1462" y="168" fill="#94a3b8" font-size="9" text-anchor="end">18.1 m²</text>
 <rect x="1198" y="177" width="10" height="10" rx="2" fill="#3d4b56" stroke="#7f9aad" stroke-width="0.8"/>
@@ -138,7 +138,7 @@
 <rect x="1198" y="213" width="10" height="10" rx="2" fill="#3d4b56" stroke="#7f9aad" stroke-width="0.8"/>
 <text x="1216" y="222" fill="#e2e8f0" font-size="10">8&#160;&#160;WC 2</text>
 <text x="1462" y="222" fill="#94a3b8" font-size="9" text-anchor="end">4.9 m²</text>
-<rect x="1198" y="231" width="10" height="10" rx="2" fill="#4b4b47" stroke="#7f7f75" stroke-width="0.8"/>
+<rect x="1198" y="231" width="10" height="10" rx="2" fill="#3d4b56" stroke="#7f9aad" stroke-width="0.8"/>
 <text x="1216" y="240" fill="#e2e8f0" font-size="10">9&#160;&#160;RIP (storage)</text>
 <text x="1462" y="240" fill="#94a3b8" font-size="9" text-anchor="end">1.4 m²</text>
 <text x="1198" y="270" fill="#f8fafc" font-size="14" font-weight="700">Lights</text>

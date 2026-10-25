@@ -11,9 +11,9 @@ path: https://raw.githubusercontent.com/c0pper/homeassistant-3d-card/5b7ecaa/
 objfile: home.obj
 mtlfile: home.mtl
 header: 'no'
-backgroundColor: sky
-exposure: 1.15
-tone_mapping: neutral
+backgroundColor: '#0b1026'
+exposure: 1.05
+tone_mapping: agx
 light_power: 1
 # torch light: brighter at night (sensor.floor3d_ambient_power, 0.75 night / 0.25 day)
 globalLightPower: sensor.floor3d_ambient_power
@@ -32,16 +32,14 @@ north:
   x: 0
   z: -1
 click: 'yes'
-# sims: near walls show the closed 20 cm stub, far walls stay full.
-# The split at 20 cm is baked into home.obj (wall_sims_low_*/wall_sims_high_*).
-# A wall also drops when its horizontal distance to the camera is within
-# walls_near_distance x the camera-target distance (edge-on internal walls).
+# sims: interior/secondary walls show the closed 20 cm stub; near exterior
+# walls drop by facing, far exterior walls stay full. The 20 cm split is baked
+# into home.obj (wall_sims_low_*/wall_sims_high_*).
 walls: sims
-walls_near_distance: 1.35
 camera_position:
   x: 0
-  y: 1500
-  z: 850
+  y: 1200
+  z: 900
 camera_target:
   x: 0
   y: 150
