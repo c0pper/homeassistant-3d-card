@@ -64,7 +64,7 @@
 - **Model format**: OBJ + MTL + GLB (for 3D export)
 - **3D object naming**: Mirrors HA entity IDs directly (e.g., `light.living_room_ball_lamp` → `living_room_ball_lamp` in OBJ group/`o` names). Keeps it consistent and easy to bind.
 - **No synonyms**: Each entity has exactly one 3D object name; one-to-one mapping.
-- **Performance**: GLB compressed with Draco.
+- **Performance**: GLB compressed with Draco. See [ADR 0001: Performance decisions](docs/adr/0001-performance-decisions.md).
 - **Material naming**: Use material names that match HA entity names (e.g., `light.living_room_ball_lamp` → `material_living_room_ball`).
 - **Card type**: Custom card that renders the 3D model in the dashboard.
 - **Choice**: floor3d‑card fork (active, updated) vs original (dormant). We chose the fork.
@@ -115,6 +115,18 @@
 | **Window** | Separate 3D object, named like `window.living_room`, `window.kitchen`. Can be linked to sensors. |
 | **Balcony** | Separate 3D object, named like `balcony.kitchen`, `balcony.studio`. |
 | **Door (opening)** | Separate 3D object linked to binary sensors (`binary_sensor.entrance_door_contact`). Can represent open/closed states in 3D. |
+
+## Performance Concepts
+
+| Term | Definition | Example / Note |
+|------|------------|---------------|
+| **Draw call** | Number of GPU draw calls — fewer is faster; group objects with same material to reduce. | Keep separate objects per material group. |
+| **Texture atlas** | Combining textures into one image to reduce draw calls and improve load time. | Use atlas for room surfaces if model grows. |
+| **Draco compression** | Google Draco compression for GLB; reduces file size ~50%+ with minimal visual loss. | Standard for production GLB export. |
+| **Meshopt compression** | Alternative to Draco; can be combined with Draco for even smaller files. | Optional if size is critical. |
+| **LOD** | Level of Detail — using simpler mesh for distant objects to improve render performance. | Not implemented yet; consider if model gets very large. |
+| **Shadow rendering** | Real-time shadow calculation; expensive on mobile. | Optional per-object; disable for small objects. |
+| **Ambient Occlusion** | Simulated shadowing in crevices for depth; cheaper than full shadows. | Used in floor3d-card for depth. |
 
 ---
 
