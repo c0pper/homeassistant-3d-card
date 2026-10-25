@@ -1,5 +1,5 @@
 diff --git a/src/const.ts b/src/const.ts
-index d3e79bc..0097f6e 100644
+index d3e79bc..be98134 100644
 --- a/src/const.ts
 +++ b/src/const.ts
 @@ -1,7 +1,7 @@
@@ -7,15 +7,162 @@ index d3e79bc..0097f6e 100644
  // Keep it equal to "version" in package.json and to the tag of the GitHub release (HACS shows the
  // tag): 2.0.0 -> v2.0.0. Test builds between releases get a suffix (v2.0.1-dev.1).
 -export const CARD_VERSION = 'v2.13.2';
-+export const CARD_VERSION = 'v2.13.2-sims.1';
++export const CARD_VERSION = 'v2.13.2-sims.2';
  
  // Events between the card editor and the card shown next to it (the preview): see editor.ts.
  export const EDITOR_EVENT = 'floor3d-card-editor';
+diff --git a/src/environment.ts b/src/environment.ts
+index 0ee2453..a24fae4 100644
+--- a/src/environment.ts
++++ b/src/environment.ts
+@@ -49,6 +49,7 @@ export class Environment {
+   private _skyKey?: string; // the gradient behind the canvas (backgroundColor: sky)
+   private _ground?: THREE.Mesh; // ground: the surface under the house
+   private _missingLogged?: { [entity: string]: boolean }; // power sensors not found, warned once
++  private _manual?: 'day' | 'night'; // manual day/night override; undefined follows the sun
+ 
+   constructor(private host: EnvironmentHost) {}
+ 
+@@ -79,6 +80,24 @@ export class Environment {
+     this._sun = undefined;
+   }
+ 
++  // The card's day/night button: undefined follows the real sun; day/night force a fixed sun, sky
++  // and torch, without touching the lamps.
++  public setManual(mode: 'day' | 'night' | undefined): void {
++    if (this._manual === mode) return;
++    this._manual = mode;
++    this._sunKey = undefined;
++    this._skyKey = undefined;
++    this._updateTorch();
++    this._updateSky();
++    this._updateSun();
++    this.updateSkyBackground(true);
++    if (this.host.renderer) {
++      const exposure = this.host.config[mode == 'day' ? 'day_exposure' : mode == 'night' ? 'night_exposure' : 'exposure'];
++      this.host.renderer.toneMappingExposure = this.host.num(exposure, this.host.num(this.host.config.exposure, 1));
++    }
++    this.host.scheduleRender();
++  }
++
+   // The ground follows the levels shown: it opens over the levels under it when only those are
+   // shown (a basement under ground_floor_level), so that they can be seen with the ground around the
+   // house (until 2.12.1 all of it hid). A level is under the ground when the middle of its height
+@@ -128,7 +147,15 @@ export class Environment {
+   // globalLightPower can be a numeric sensor: read at every update (before, only at startup).
+   private _updateTorch(): void {
+     if (!this._torch) return;
+-    const intensity = this._power('globalLightPower', 0.2) * TORCH_SCALE;
++    let intensity: number;
++    if (this._manual) {
++      const day = this._manual == 'day';
++      intensity =
++        this._value(this.host.config[day ? 'day_globalLightPower' : 'night_globalLightPower'], day ? 0.25 : 0.75) *
++        TORCH_SCALE;
++    } else {
++      intensity = this._power('globalLightPower', 0.2) * TORCH_SCALE;
++    }
+     if (intensity === this._torch.intensity) return;
+     this._torch.intensity = intensity;
+     this.host.scheduleRender();
+@@ -164,6 +191,12 @@ export class Environment {
+     this.host.scheduleRender();
+   }
+ 
++  // A numeric value of the config, or the state of a numeric sensor. Negative counts as 0.
++  private _value(value: unknown, fallback: number): number {
++    const entity = typeof value === 'string' && this.host.hass ? this.host.hass.states[value] : undefined;
++    return Math.max(0, this.host.num(entity ? entity.state : value, fallback));
++  }
++
+   // A light power of the config: a number, or the id of a numeric sensor whose state is read at
+   // every update. An unavailable sensor (or a state that isn't a number) gives the default, and a
+   // negative value counts as 0.
+@@ -352,6 +385,8 @@ export class Environment {
+ 
+   // Azimuth and elevation of the sun entity, in degrees: NaN without it.
+   private _sunAngles(): [number, number] {
++    // Manual day/night: a fixed sun, so the look does not depend on the real time.
++    if (this._manual) return this._manual == 'day' ? [180, 45] : [180, -30];
+     const sun = this.host.hass && this.host.hass.states[this.host.config.sun_entity || 'sun.sun'];
+     return sun ? [Number(sun.attributes.azimuth), Number(sun.attributes.elevation)] : [NaN, NaN];
+   }
 diff --git a/src/floor3d-card.ts b/src/floor3d-card.ts
-index 39bf4f5..8571d0b 100644
+index 39bf4f5..4ca4785 100644
 --- a/src/floor3d-card.ts
 +++ b/src/floor3d-card.ts
-@@ -3358,21 +3358,17 @@ export class Floor3dCard extends LitElement {
+@@ -188,6 +188,9 @@ export class Floor3dCard extends LitElement {
+   private _env = new Environment(this._environmentHost());
+   // The walls in the way of the view: faded, or cut low (walls.ts).
+   private _walls = new Walls(this._wallsHost());
++  // Day/night button: auto follows the real sun; day/night force a look. Per card instance, so it
++  // resets to auto on reload (no HA helper).
++  private _lightingMode: 'auto' | 'day' | 'night' = 'auto';
+   // The rooms coloured by a map, their labels, the Map menu and its legend (rooms.ts).
+   private _roomMaps = new RoomMaps(this._roomsHost());
+   // The entity types in modules of their own (see entity-types.ts).
+@@ -1583,6 +1586,7 @@ export class Floor3dCard extends LitElement {
+       }
+ 
+       this._env.init();
++      this._env.setManual(this._lightingMode === 'auto' ? undefined : this._lightingMode);
+ 
+       this._applyShadowBudget();
+ 
+@@ -3317,6 +3321,44 @@ export class Floor3dCard extends LitElement {
+     }
+   }
+ 
++  private _lightingIcon(): string {
++    return this._lightingMode == 'day'
++      ? 'mdi:weather-sunny'
++      : this._lightingMode == 'night'
++        ? 'mdi:weather-night'
++        : 'mdi:theme-light-dark';
++  }
++
++  private _lightingLabel(): string {
++    return this._lightingMode == 'day' ? 'DAY' : this._lightingMode == 'night' ? 'NIGHT' : 'AUTO';
++  }
++
++  private _nextLightingLabel(): string {
++    return this._lightingMode == 'auto' ? 'day' : this._lightingMode == 'day' ? 'night' : 'auto';
++  }
++
++  private _cycleLighting = (ev: Event): void => {
++    ev.stopPropagation();
++    this._lightingMode = this._lightingMode == 'auto' ? 'day' : this._lightingMode == 'day' ? 'night' : 'auto';
++    this._env.setManual(this._lightingMode == 'auto' ? undefined : this._lightingMode);
++    this.requestUpdate();
++  };
++
++  private _lightingButton(): TemplateResult {
++    const title = `Lighting: ${this._lightingMode}; click for ${this._nextLightingLabel()}`;
++    return html`<button
++      type="button"
++      class="f3d-lighting"
++      style="position:absolute;left:14px;bottom:14px;z-index:30;display:flex;align-items:center;gap:6px;padding:7px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(10,18,32,.72);color:#f8fafc;font:600 11px/1 system-ui,sans-serif;letter-spacing:.05em;cursor:pointer;backdrop-filter:blur(4px);"
++      title="${title}"
++      aria-label="${title}"
++      @click=${this._cycleLighting}
++    >
++      <ha-icon .icon=${this._lightingIcon()} style="--mdc-icon-size:18px;"></ha-icon>
++      <span>${this._lightingLabel()}</span>
++    </button>`;
++  }
++
+   protected render(): TemplateResult | void {
+     if (this._config.show_error) {
+       return this._showError(this._t('show_error'));
+@@ -3334,6 +3376,7 @@ export class Floor3dCard extends LitElement {
+         }`}
+         id="${this._card_id}"
+       >
++        ${this._lightingButton()}
+       </ha-card>
+     `;
+   }
+@@ -3358,21 +3401,17 @@ export class Floor3dCard extends LitElement {
    }
  }
  
