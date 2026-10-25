@@ -1,5 +1,5 @@
 diff --git a/src/const.ts b/src/const.ts
-index d3e79bc..de717e2 100644
+index d3e79bc..05cec35 100644
 --- a/src/const.ts
 +++ b/src/const.ts
 @@ -1,7 +1,7 @@
@@ -7,7 +7,7 @@ index d3e79bc..de717e2 100644
  // Keep it equal to "version" in package.json and to the tag of the GitHub release (HACS shows the
  // tag): 2.0.0 -> v2.0.0. Test builds between releases get a suffix (v2.0.1-dev.1).
 -export const CARD_VERSION = 'v2.13.2';
-+export const CARD_VERSION = 'v2.13.2-sims.4';
++export const CARD_VERSION = 'v2.13.2-sims.5';
  
  // Events between the card editor and the card shown next to it (the preview): see editor.ts.
  export const EDITOR_EVENT = 'floor3d-card-editor';
@@ -192,16 +192,29 @@ index 39bf4f5..7deeaa6 100644
 -  );
 +  console.warn('floor3d-card sims: custom:floor3d-card-sims is already defined');
  }
+diff --git a/src/types.ts b/src/types.ts
+index 71cafd2..69d796c 100644
+--- a/src/types.ts
++++ b/src/types.ts
+@@ -62,6 +62,7 @@ export interface Floor3dCardConfig {
+   walls_objects?: string; // the walls: wall_* by default, the walls of Sweet Home 3D
+   walls_opacity?: number | string; // fade: how much of a faded wall shows, 0.15 by default
+   walls_height?: number | string; // low: the height of the cut above the floor, 100 cm by default
++  walls_near_distance?: number | string; // sims: near band as a multiple of the camera-target distance, 1.35
+   globalLightPower: number | string; // a number or a numeric sensor
+   hideLevelsMenu: string;
+   initialLevel: number;
 diff --git a/src/walls.ts b/src/walls.ts
-index 7f4e9ce..50b9c69 100644
+index 7f4e9ce..0af97ac 100644
 --- a/src/walls.ts
 +++ b/src/walls.ts
-@@ -7,18 +7,26 @@ import * as THREE from 'three';
+@@ -7,18 +7,27 @@ import * as THREE from 'three';
  import type { Floor3dCardConfig } from './types';
  
  const FADE_TIME = 0.4; // seconds from solid to faded, and back
 -const FACING = 0.3; // a wall fades when its face turns to the camera more than this (a cosine)
 +const FACING = 0.3; // a wall fades or drops when its face turns to the camera more than this (a cosine)
++const NEAR_DISTANCE = 1.35; // also drop edge-on walls up to this share of the horizontal camera-to-target distance
  
  interface WallView {
    mesh: THREE.Mesh;
@@ -225,7 +238,7 @@ index 7f4e9ce..50b9c69 100644
  export interface WallsHost {
    readonly config: Floor3dCardConfig;
    readonly scene: THREE.Scene;
-@@ -74,12 +82,13 @@ function facing(mesh: THREE.Mesh): { normal: THREE.Vector3; middle: THREE.Vector
+@@ -74,12 +83,13 @@ function facing(mesh: THREE.Mesh): { normal: THREE.Vector3; middle: THREE.Vector
  
  export class Walls {
    private _walls: WallView[] = [];
@@ -240,7 +253,7 @@ index 7f4e9ce..50b9c69 100644
    public get mode(): string {
      return this._mode;
    }
-@@ -91,12 +100,13 @@ export class Walls {
+@@ -91,12 +101,13 @@ export class Walls {
  
    // The model is set up (and centred): its walls get materials of their own, as a GLB often shares
    // one material among the walls and other objects. With low they are cut; with fade the walls in
@@ -256,7 +269,7 @@ index 7f4e9ce..50b9c69 100644
      if (this._mode == 'none') return;
      const meshes: THREE.Mesh[] = [];
      this.host.objectNamesFor([String(this.host.config.walls_objects || 'wall_*')]).forEach((name) => {
-@@ -113,6 +123,10 @@ export class Walls {
+@@ -113,6 +124,10 @@ export class Walls {
        );
        return;
      }
@@ -267,7 +280,7 @@ index 7f4e9ce..50b9c69 100644
      this._walls = meshes.map((mesh) => {
        const own = (Array.isArray(mesh.material) ? mesh.material : [mesh.material]).map((m) => m.clone());
        mesh.material = Array.isArray(mesh.material) ? own : own[0];
-@@ -129,6 +143,68 @@ export class Walls {
+@@ -129,6 +144,68 @@ export class Walls {
      else this._face();
    }
  
@@ -336,7 +349,7 @@ index 7f4e9ce..50b9c69 100644
    // low: each level cut at walls_height (100 cm by default) above its floor, the floor of its walls.
    // The inside of a cut wall shows, so that it looks solid from above; its shadow stays whole.
    private _cut(): void {
-@@ -185,6 +261,10 @@ export class Walls {
+@@ -185,6 +262,10 @@ export class Walls {
    // The camera moved: the walls whose face turns to it fade, the others come back. Seen straight from
    // above no wall is in the way.
    public update(): void {
@@ -347,19 +360,25 @@ index 7f4e9ce..50b9c69 100644
      if (this._mode != 'fade' || !this._walls.length) return;
      const side = this.host.camera.position.clone().sub(this.host.target).setY(0);
      const level = side.lengthSq() > 1e-6;
-@@ -201,6 +281,26 @@ export class Walls {
+@@ -201,6 +282,32 @@ export class Walls {
      if (changed) this.host.animate();
    }
  
 +  // sims: hide the high part when the wall faces the camera; show it again otherwise. Seen straight
 +  // from above there is no side, so every wall stays full.
 +  private _updateSims(): void {
-+    const side = this.host.camera.position.clone().sub(this.host.target).setY(0);
-+    const level = side.lengthSq() > 1e-6;
++    const camera = this.host.camera.position;
++    const side = camera.clone().sub(this.host.target).setY(0);
++    const distance = side.length();
++    const level = distance > 1e-6;
 +    if (level) side.normalize();
++    const nearDistance = distance * this.host.num(this.host.config.walls_near_distance, NEAR_DISTANCE);
 +    let changed = false;
 +    this._sims.forEach((w) => {
-+      const near = level && w.normal && w.normal.dot(side) > FACING;
++      // Facing walls drop as before; an edge-on wall also drops when it is nearer than the target,
++      // so internal walls and side walls do not block a three-quarter view.
++      const facing = level && w.normal && w.normal.dot(side) > FACING;
++      const near = level && (facing || Math.hypot(camera.x - w.middle.x, camera.z - w.middle.y) < nearDistance);
 +      const visible = !near;
 +      if (w.high.visible !== visible) {
 +        w.high.visible = visible;
